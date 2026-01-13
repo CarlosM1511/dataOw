@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import DashboardFinal from './DashboardFInal';
+import DashboardPadel from './DashboardPadel';
 
 // ==========================================
 // THEME COLORS (From DataO Logo)
@@ -12,6 +13,21 @@ const theme = {
   darkGray: '#333333'
 };
 
+// ===============================
+// PORTAL THEME (DataO Dark)
+// ===============================
+const portalTheme = {
+  bg: '#000000',
+  panel: '#0a0a0a',
+  card: '#111111',
+  border: '#333333',
+  text: '#ffffff',
+  muted: '#9ca3af',
+  primary: '#2563eb',
+  dangerBg: '#7f1d1d',
+  dangerBorder: '#991b1b'
+};
+
 // ==========================================
 // AUTH SERVICE FOR PORTAL
 // ==========================================
@@ -20,6 +36,7 @@ const clientDatabase = {
     id: 1,
     name: 'Ecotiendita',
     businessName: 'Ecotiendita Hermosillo',
+    dashboardType: 'retail',
     dashboardUrl: 'https://lookerstudio.google.com/embed/reporting/c6709eb1-305d-4dc9-8d3b-2b6b6eb230d7',
     theme: { primary: theme.primary, secondary: '#34D399' }
   },
@@ -27,8 +44,17 @@ const clientDatabase = {
     id: 2,
     name: 'La Verdería',
     businessName: 'La Verdería Orgánica',
+    dashboardType: 'retail',
     dashboardUrl: 'https://lookerstudio.google.com/embed/reporting/1sMGl0jXFu-5S6HqJd-pXdJZ0TZqLKp8m',
     theme: { primary: '#10B981', secondary: '#F59E0B' }
+  },
+  'PADEL2026': {
+    id: 3,
+    name: 'Padel Pro',
+    businessName: 'Padel Pro',
+    dashboardType: 'padel', 
+    dashboardUrl: 'https://lookerstudio.google.com/embed/reporting/1sMGl0jXFu-5S6HqJd-pXdJZ0TZqLKp8m',
+    theme: { primary: '#0ea5e9', secondary: '#020617' }
   }
 };
 
@@ -55,16 +81,21 @@ const Header = ({ currentPage, onNavigate }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    let lastScroll = 0;
     const handleScroll = () => {
-      const currentScroll = window.pageYOffset;
-      setIsScrolled(currentScroll > lastScroll && currentScroll > 100);
-      lastScroll = currentScroll;
-    };
+    const y = window.scrollY;
+
+    // solo mostrar header cuando estés cerca del top
+    if (y < 120) {
+      setIsScrolled(false);
+    } else {
+      setIsScrolled(true);
+    }
+  };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
 
   const navItems = [
     { id: 'home', label: 'Home' },
@@ -99,8 +130,8 @@ const Header = ({ currentPage, onNavigate }) => {
             src={process.env.PUBLIC_URL + '/img/DataO.jpg'} 
             alt="DataO Logo"
             style={{
-              width: '270px',
-              height: '120px',
+              width: '230px',
+              height: '80px',
               objectFit: 'contain',
               objectPosition: 'center'
             }}
@@ -482,7 +513,7 @@ const ServicesPage = ({ onNavigate }) => {
     {
       name: 'Dashboard Básico',
       price: '$750 MXN',
-      features: ['✓ Limpieza de datos', '✓ 2 a 3 gráficas informativas', '✓ Entrega por correo o WhatsApp', '⏱ 48–72h de entrega']
+      features: ['✓ Limpieza de datos', '✓ 2 a 3 gráficas informativas', '✓ Acceso a Portal', '⏱ 48–72h de entrega']
     },
     {
       name: 'Análisis con Insights',
@@ -726,7 +757,7 @@ const PortalLogin = ({ onLoginSuccess }) => {
             Ver códigos de prueba
           </summary>
           <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {['ECOT2023', 'VERDE2023'].map(c => (
+            {['ECOT2023', 'VERDE2023', 'PADEL2026'].map(c => (
               <code
                 key={c}
                 onClick={() => setCode(c)}
@@ -753,48 +784,71 @@ const PortalLogin = ({ onLoginSuccess }) => {
 // ==========================================
 const PortalDashboard = ({ client, onLogout }) => {
   return (
-    <div style={{ minHeight: 'calc(100vh - 150px)' }}>
-      <div style={{
-        background: theme.white,
-        padding: '1.5rem 2rem',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+    <div
+      style={{
+        minHeight: '100vh',
+        background: portalTheme.bg,
+        color: portalTheme.text,
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '1rem'
-      }}>
+        flexDirection: 'column'
+      }}
+    >
+      {/* TOP BAR */}
+      <div
+        style={{
+          background: portalTheme.bg,
+          padding: '14px 24px',
+          borderBottom: `1px solid ${portalTheme.border}`,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1rem',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100
+        }}
+      >
         <div>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{client.businessName}</h2>
-          <p style={{ color: theme.darkGray }}>Dashboard de Análisis</p>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: 0 }}>
+            {client.businessName}
+          </h2>
+          <p style={{ color: portalTheme.muted, fontSize: '0.875rem', margin: 0 }}>
+            Dashboard de Análisis
+          </p>
         </div>
+
         <button
           onClick={onLogout}
           style={{
-            padding: '0.75rem 1.5rem',
-            background: '#fee2e2',
-            color: '#991b1b',
-            border: 'none',
+            padding: '10px 16px',
+            background: portalTheme.dangerBg,
+            color: '#fff',
+            border: `1px solid ${portalTheme.dangerBorder}`,
             borderRadius: '8px',
-            fontWeight: 'bold',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            fontWeight: 500
           }}
         >
-          🚪 Cerrar Sesión
+          🚪 Cerrar sesión
         </button>
       </div>
 
-      <div style={{ padding: '2rem' }}>
-        <div style={{
-          background: theme.white,
-          borderRadius: '12px',
-          overflow: 'hidden',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          minWidth: 0,
-          minHeight: 480
-        }}>
-          {/* Render the user's React dashboard component here instead of the Looker iframe */}
-          <DashboardFinal client={client} />
+      {/* CONTENT */}
+      <div style={{ padding: '0' }}>
+        <div
+          style={{
+            flex: 1,
+            background: portalTheme.bg,
+            minWidth: 0,
+            overflow: 'hidden'
+          }}
+        >
+          {client.dashboardType === 'padel' ? (
+            <DashboardPadel client={client} />
+          ) : (
+            <DashboardFinal client={client} />
+          )}
         </div>
       </div>
     </div>
@@ -859,10 +913,9 @@ const Footer = () => {
   return (
     <footer style={{
       background: theme.secondary,
-      color: theme.white,
+      color: portalTheme.text,
       textAlign: 'center',
       padding: '2rem',
-      marginTop: '4rem'
     }}>
       <p>© 2025 DataO. All rights reserved.</p>
       <p style={{ fontSize: '14px', color: '#888', marginTop: '0.5rem' }}>
