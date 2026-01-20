@@ -23,7 +23,7 @@ const theme = {
 
 const PadelDashboard = ({ client }) => {
   const [activeView, setActiveView] = useState('dashboard');
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode] = useState(true);
   const [selectedCourt, setSelectedCourt] = useState('all');
   const [selectedGender, setSelectedGender] = useState('all');
   const [selectedApp, setSelectedApp] = useState('all');
