@@ -55,6 +55,14 @@ const clientDatabase = {
     dashboardType: 'padel', 
     dashboardUrl: 'https://lookerstudio.google.com/embed/reporting/1sMGl0jXFu-5S6HqJd-pXdJZ0TZqLKp8m',
     theme: { primary: '#0ea5e9', secondary: '#020617' }
+  },
+  'PADEL2025': {
+    id: 4,
+    name: 'Padel Club',
+    businessName: 'Padel Club Analytics',
+    dashboardType: 'padel', 
+    dashboardUrl: 'https://dashboardpadel.vercel.app/',
+    theme: { primary: '#0ea5e9', secondary: '#020617' }
   }
 };
 
@@ -112,12 +120,15 @@ const Header = ({ currentPage, onNavigate }) => {
       top: isScrolled ? '-150px' : '0',
       zIndex: 1000,
       transition: 'top 0.3s',
-      boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
+      boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+      width: '100%',
+      overflow: 'visible',
+      position: 'relative'
     }}>
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '1rem 2rem',
+        padding: '1rem clamp(1rem, 2vw, 2rem)',
         paddingTop: '0.1rem',
         paddingLeft: '0.1rem',
         paddingBottom: '0.2rem',
@@ -130,7 +141,7 @@ const Header = ({ currentPage, onNavigate }) => {
             src={process.env.PUBLIC_URL + '/img/DataO.jpg'} 
             alt="DataO Logo"
             style={{
-              width: '230px',
+              width: '180px',
               height: '80px',
               objectFit: 'contain',
               objectPosition: 'center'
@@ -185,41 +196,45 @@ const Header = ({ currentPage, onNavigate }) => {
             ))}
           </ul>
         </nav>
-
-        {menuOpen && (
-          <nav style={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            background: theme.secondary,
-            padding: '1rem',
-            display: 'none'
-          }} className="mobile-nav">
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {navItems.map(item => (
-                <li key={item.id} style={{ padding: '0.75rem 0' }}>
-                  <a
-                    onClick={() => {
-                      onNavigate(item.id);
-                      setMenuOpen(false);
-                    }}
-                    style={{
-                      color: theme.white,
-                      textDecoration: 'none',
-                      fontWeight: 'bold',
-                      cursor: 'pointer',
-                      display: 'block'
-                    }}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
       </div>
+
+      <nav style={{
+        position: 'absolute',
+        top: '100%',
+        left: 0,
+        right: 0,
+        background: theme.secondary,
+        padding: menuOpen ? '1rem' : '0',
+        maxHeight: menuOpen ? '300px' : '0',
+        opacity: menuOpen ? 1 : 0,
+        visibility: menuOpen ? 'visible' : 'hidden',
+        transition: 'all 0.3s ease',
+        overflow: 'hidden',
+        display: 'none',
+        zIndex: 999
+      }} className="mobile-nav">
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          {navItems.map(item => (
+            <li key={item.id} style={{ padding: '0.75rem 1rem' }}>
+              <a
+                onClick={() => {
+                  onNavigate(item.id);
+                  setMenuOpen(false);
+                }}
+                style={{
+                  color: theme.white,
+                  textDecoration: 'none',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  display: 'block'
+                }}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       <style>{`
         @media (max-width: 768px) {
@@ -231,6 +246,12 @@ const Header = ({ currentPage, onNavigate }) => {
           }
           .mobile-nav {
             display: block !important;
+            position: absolute !important;
+            top: 100% !important;
+            left: 0 !important;
+            right: 0 !important;
+            background: ${theme.secondary} !important;
+            overflow: hidden !important;
           }
         }
       `}</style>
@@ -243,13 +264,16 @@ const Header = ({ currentPage, onNavigate }) => {
 // ==========================================
 const HomePage = ({ onNavigate }) => {
   return (
-    <div>
+    <div style={{ width: '100%', margin: 0, padding: 0, boxSizing: 'border-box', overflow: 'hidden' }}> 
       {/* Hero Section */}
       <section style={{
         textAlign: 'center',
         padding: '5rem 1rem',
         background: theme.gray,
-        fontSize: '1.18rem'
+        fontSize: '1.18rem',
+        width: '100%',
+        margin: 0,
+        boxSizing: 'border-box'
       }}>
         <h2 style={{
           fontSize: 'clamp(2rem, 5vw, 3rem)',
@@ -990,10 +1014,17 @@ const App = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', 
+                  display: 'flex', 
+                  flexDirection: 'column',
+                  width: '100%',
+                  overflow: 'hidden',
+                  margin: 0,
+                  padding: 0 
+                }}>
       <Header currentPage={currentPage} onNavigate={handleNavigate} />
       
-      <main style={{ flex: 1 }}>
+      <main style={{ flex: 1 , width: '100%', overflow: 'hidden'}}>
         {currentPage === 'home' && <HomePage onNavigate={handleNavigate} />}
         {currentPage === 'services' && <ServicesPage onNavigate={handleNavigate} />}
         {currentPage === 'contact' && <ContactPage />}
