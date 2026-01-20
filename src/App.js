@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import DashboardFinal from './DashboardFInal';
 import DashboardPadel from './DashboardPadel';
 
 // ==========================================
@@ -32,22 +31,6 @@ const portalTheme = {
 // AUTH SERVICE FOR PORTAL
 // ==========================================
 const clientDatabase = {
-  'ECOT2023': {
-    id: 1,
-    name: 'Ecotiendita',
-    businessName: 'Ecotiendita Hermosillo',
-    dashboardType: 'retail',
-    dashboardUrl: 'https://lookerstudio.google.com/embed/reporting/c6709eb1-305d-4dc9-8d3b-2b6b6eb230d7',
-    theme: { primary: theme.primary, secondary: '#34D399' }
-  },
-  'VERDE2023': {
-    id: 2,
-    name: 'La Verdería',
-    businessName: 'La Verdería Orgánica',
-    dashboardType: 'retail',
-    dashboardUrl: 'https://lookerstudio.google.com/embed/reporting/1sMGl0jXFu-5S6HqJd-pXdJZ0TZqLKp8m',
-    theme: { primary: '#10B981', secondary: '#F59E0B' }
-  },
   'PADEL2026': {
     id: 3,
     name: 'Padel Pro',
@@ -115,7 +98,6 @@ const Header = ({ currentPage, onNavigate }) => {
       boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
       width: '100%',
       overflow: 'visible',
-      position: 'relative'
     }}>
       <div style={{
         maxWidth: '1200px',
@@ -773,7 +755,7 @@ const PortalLogin = ({ onLoginSuccess }) => {
             Ver códigos de prueba
           </summary>
           <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {['ECOT2023', 'VERDE2023', 'PADEL2026'].map(c => (
+            {['PADEL2026'].map(c => (
               <code
                 key={c}
                 onClick={() => setCode(c)}
@@ -862,9 +844,7 @@ const PortalDashboard = ({ client, onLogout }) => {
         >
           {client.dashboardType === 'padel' ? (
             <DashboardPadel client={client} />
-          ) : (
-            <DashboardFinal client={client} />
-          )}
+          ): null}
         </div>
       </div>
     </div>
