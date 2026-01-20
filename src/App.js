@@ -190,7 +190,7 @@ const Header = ({ currentPage, onNavigate }) => {
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
           {navItems.map(item => (
             <li key={item.id} style={{ padding: '0.75rem 1rem' }}>
-              <a
+              <a href
                 onClick={() => {
                   onNavigate(item.id);
                   setMenuOpen(false);

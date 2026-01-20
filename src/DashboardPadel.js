@@ -2,24 +2,6 @@ import React, { useState, useMemo, useRef } from 'react';
 import { BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { padelBookings } from '../src/padelData';
 
-const NavButton = ({ label, active, onClick }) => (
-  <button
-    onClick={onClick}
-    style={{
-      padding: '10px 16px',
-      background: active ? '#2563eb' : '#111',
-      color: '#fff',
-      border: '1px solid #333',
-      borderRadius: '8px',
-      cursor: 'pointer',
-      fontWeight: 500,
-      opacity: active ? 1 : 0.7
-    }}
-  >
-    {label}
-  </button>
-);
-
 const theme = {
   primary: '#00D9FF',
   secondary: '#000000',
@@ -46,7 +28,6 @@ const PadelDashboard = ({ client }) => {
   const [selectedGender, setSelectedGender] = useState('all');
   const [selectedApp, setSelectedApp] = useState('all');
   const [selectedPeriod, setSelectedPeriod] = useState(90);
-  const [generating, setGenerating] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
   const dashboardRef = useRef(null);
@@ -247,8 +228,6 @@ const PadelDashboard = ({ client }) => {
   const cardBg = darkMode ? theme.dark.card : theme.white;
   const borderColor = darkMode ? theme.dark.border : theme.border;
   const textColor = darkMode ? theme.dark.text : theme.secondary;
-
-  const COLORS = ['#00D9FF', '#00FF88', '#6366F1', '#FF006E', '#FFB800', '#FF1744', '#00E676', '#FF9100'];
 
   return (
     <div style={{ 
