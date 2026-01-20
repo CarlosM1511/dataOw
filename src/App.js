@@ -151,7 +151,7 @@ const Header = ({ currentPage, onNavigate }) => {
           }}>
             {navItems.map(item => (
               <li key={item.id}>
-                <a
+                <a href
                   onClick={() => onNavigate(item.id)}
                   style={{
                     color: currentPage === item.id ? theme.primary : theme.white,
