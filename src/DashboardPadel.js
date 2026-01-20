@@ -3,7 +3,7 @@ import { BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, Cart
 import { FileText } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { padelBookings } from '../src/padelData2';
+import { padelBookings } from '../src/padelData';
 
 const NavButton = ({ label, active, onClick }) => (
   <button
