@@ -55,14 +55,6 @@ const clientDatabase = {
     dashboardType: 'padel', 
     dashboardUrl: 'https://lookerstudio.google.com/embed/reporting/1sMGl0jXFu-5S6HqJd-pXdJZ0TZqLKp8m',
     theme: { primary: '#0ea5e9', secondary: '#020617' }
-  },
-  'PADEL2025': {
-    id: 4,
-    name: 'Padel Club',
-    businessName: 'Padel Club Analytics',
-    dashboardType: 'padel', 
-    dashboardUrl: 'https://dashboardpadel.vercel.app/',
-    theme: { primary: '#0ea5e9', secondary: '#020617' }
   }
 };
 
