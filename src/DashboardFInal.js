@@ -27,7 +27,7 @@ const EcotiendaPDFReport = ({ client }) => {
 
   useEffect(() => {
     generateData();
-  }, []);
+  }, [generateData]);
 
   const generateData = () => {
     const products = {
