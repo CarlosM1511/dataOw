@@ -234,214 +234,456 @@ const Header = ({ currentPage, onNavigate }) => {
 };
 
 // ==========================================
-// HOME PAGE
+// HOMEPAGE - ESTILO APPLE
 // ==========================================
+
 const HomePage = ({ onNavigate }) => {
   return (
     <div style={{ width: '100%', margin: 0, padding: 0, boxSizing: 'border-box', overflow: 'hidden' }}> 
-      {/* Hero Section */}
+      
+      {/* Hero Section - Apple Style */}
       <section style={{
         textAlign: 'center',
-        padding: '5rem 1rem',
-        background: theme.gray,
-        fontSize: '1.18rem',
-        width: '100%',
-        margin: 0,
-        boxSizing: 'border-box'
+        padding: '8rem 2rem',
+        background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 100%)',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
-        <h2 style={{
-          fontSize: 'clamp(2rem, 5vw, 3rem)',
-          marginBottom: '1rem',
-          color: theme.secondary
+        {/* Efecto de brillo de fondo */}
+        <div style={{
+          position: 'absolute',
+          top: '20%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '600px',
+          height: '600px',
+          background: 'radial-gradient(circle, rgba(0,255,224,0.08) 0%, transparent 70%)',
+          pointerEvents: 'none'
+        }} />
+        
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <h2 style={{
+            fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+            marginBottom: '1.5rem',
+            color: '#ffffff',
+            fontWeight: '700',
+            letterSpacing: '-0.03em',
+            lineHeight: '1.1'
+          }}>
+            Datos que hablan.<br/>Decisiones que funcionan.
+          </h2>
+          <p style={{
+            fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
+            color: '#86868b',
+            marginBottom: '3rem',
+            maxWidth: '800px',
+            margin: '0 auto 3rem',
+            fontWeight: '400'
+          }}>
+            La forma más inteligente de entender tu negocio.
+          </p>
+          <button
+            onClick={() => onNavigate('services')}
+            style={{
+              padding: '1.2rem 3rem',
+              background: '#00FFE0',
+              color: '#000000',
+              border: 'none',
+              fontWeight: '600',
+              cursor: 'pointer',
+              fontSize: '1.2rem',
+              borderRadius: '50px',
+              transition: 'all 0.3s',
+              boxShadow: '0 10px 30px rgba(0,255,224,0.3)'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = 'scale(1.05)';
+              e.target.style.boxShadow = '0 15px 40px rgba(0,255,224,0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = 'scale(1)';
+              e.target.style.boxShadow = '0 10px 30px rgba(0,255,224,0.3)';
+            }}
+          >
+            Empieza hoy
+          </button>
+        </div>
+      </section>
+
+      {/* About Section - Apple Style */}
+      <section style={{
+        maxWidth: '1000px',
+        margin: '8rem auto',
+        padding: '0 2rem',
+        textAlign: 'center'
+      }}>
+        <h3 style={{ 
+          fontSize: 'clamp(2rem, 4vw, 3rem)', 
+          marginBottom: '1.5rem',
+          color: '#000000',
+          fontWeight: '600',
+          letterSpacing: '-0.02em'
         }}>
-          Smart Data for Smart Decisions
-        </h2>
-        <p style={{
-          fontSize: '1.3rem',
-          color: theme.darkGray,
-          marginBottom: '2rem'
+          Tus datos. Tus decisiones.<br/>Sin complicaciones.
+        </h3>
+        <p style={{ 
+          fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', 
+          lineHeight: '1.6', 
+          color: '#86868b',
+          fontWeight: '400'
         }}>
-          Convertimos tus datos en decisiones accionables.
+          Dashboards que muestran lo que importa.<br/>
+          Sin curva de aprendizaje. Sin sorpresas.
         </p>
-        <button
-          onClick={() => onNavigate('services')}
-          style={{
-            padding: '1.1rem 2.5rem',
-            background: theme.secondary,
-            color: theme.white,
-            border: `2px solid ${theme.secondary}`,
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            fontSize: '22px',
-            borderRadius: '8px',
-            transition: 'all 0.3s'
+      </section>
+
+      {/* Dashboard Preview Section - Apple Style */}
+      <section style={{
+        background: '#000000',
+        padding: '6rem 2rem',
+        margin: '4rem 0',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{ 
+          maxWidth: '1400px', 
+          margin: '0 auto',
+          textAlign: 'center',
+          position: 'relative',
+          zIndex: 1
+        }}>
+          <h3 style={{ 
+            fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+            fontWeight: '600',
+            color: '#ffffff',
+            marginBottom: '1rem',
+            letterSpacing: '-0.02em'
+          }}>
+            Tu dashboard. Profesional. Poderoso.
+          </h3>
+          
+          <p style={{ 
+            fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)',
+            color: '#86868b',
+            marginBottom: '4rem',
+            maxWidth: '800px',
+            margin: '0 auto 4rem'
+          }}>
+            Visualiza tus datos en tiempo real con gráficas interactivas que revelan insights al instante.
+          </p>
+
+          <div style={{
+            position: 'relative',
+            maxWidth: '1200px',
+            margin: '0 auto 4rem',
+            borderRadius: '20px',
+            overflow: 'hidden',
+            boxShadow: '0 25px 80px rgba(0, 255, 224, 0.15), 0 10px 30px rgba(0, 0, 0, 0.5)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            transition: 'transform 0.5s ease, box-shadow 0.5s ease',
+            cursor: 'pointer'
           }}
           onMouseEnter={(e) => {
-            e.target.style.background = theme.primary;
-            e.target.style.color = theme.secondary;
-            e.target.style.borderColor = theme.primary;
+            e.currentTarget.style.transform = 'scale(1.02) translateY(-10px)';
+            e.currentTarget.style.boxShadow = '0 35px 100px rgba(0, 255, 224, 0.25), 0 15px 40px rgba(0, 0, 0, 0.6)';
           }}
           onMouseLeave={(e) => {
-            e.target.style.background = theme.secondary;
-            e.target.style.color = theme.white;
-            e.target.style.borderColor = theme.secondary;
+            e.currentTarget.style.transform = 'scale(1) translateY(0)';
+            e.currentTarget.style.boxShadow = '0 25px 80px rgba(0, 255, 224, 0.15), 0 10px 30px rgba(0, 0, 0, 0.5)';
           }}
-        >
-          Aumenta tus ganancias hoy
-        </button>
+          onClick={() => onNavigate('portal')}
+          >
+            <img 
+              src={process.env.PUBLIC_URL + '/img/dashboard-preview.png'} 
+              alt="Dashboard DataO Preview" 
+              style={{ 
+                width: '100%', 
+                height: 'auto',
+                display: 'block'
+              }}
+            />
+            
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.3) 100%)',
+              pointerEvents: 'none'
+            }} />
+          </div>
+
+          <div style={{ 
+            display: 'flex', 
+            gap: '1rem', 
+            justifyContent: 'center', 
+            flexWrap: 'wrap' 
+          }}>
+            <button
+              onClick={() => onNavigate('portal')}
+              style={{
+                padding: '1rem 2.5rem',
+                background: 'transparent',
+                color: '#00FFE0',
+                border: '2px solid #00FFE0',
+                borderRadius: '50px',
+                fontSize: '1.1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = '#00FFE0';
+                e.target.style.color = '#000000';
+                e.target.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'transparent';
+                e.target.style.color = '#00FFE0';
+                e.target.style.transform = 'scale(1)';
+              }}
+            >
+              Explorar demo interactivo
+            </button>
+            
+            <button
+              onClick={() => onNavigate('services')}
+              style={{
+                padding: '1rem 2.5rem',
+                background: 'transparent',
+                color: '#ffffff',
+                border: '2px solid rgba(255,255,255,0.3)',
+                borderRadius: '50px',
+                fontSize: '1.1rem',
+                fontWeight: '500',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.borderColor = '#ffffff';
+                e.target.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.borderColor = 'rgba(255,255,255,0.3)';
+                e.target.style.transform = 'scale(1)';
+              }}
+            >
+              Ver planes
+            </button>
+          </div>
+
+          <p style={{
+            marginTop: '3rem',
+            fontSize: '0.9rem',
+            color: '#86868b',
+            fontWeight: '400'
+          }}>
+            Dashboard real de uno de nuestros clientes. Datos anonimizados.
+          </p>
+        </div>
+
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '800px',
+          height: '800px',
+          background: 'radial-gradient(circle, rgba(0,255,224,0.05) 0%, transparent 70%)',
+          pointerEvents: 'none',
+          zIndex: 0
+        }} />
       </section>
 
-      {/* About Section */}
+      {/* Benefits Section - Apple Style */}
       <section style={{
         maxWidth: '1200px',
-        margin: '3rem auto',
-        padding: '0 2rem',
-        textAlign: 'center',
-        fontSize: '1.13rem'
+        margin: '8rem auto',
+        padding: '0 2rem'
       }}>
-        <h3 style={{ fontSize: '2rem', marginBottom: '1rem' }}>¿Qué es DataO?</h3>
-        <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: theme.darkGray }}>
-          DataO es una solución de análisis de datos para pequeñas y medianas empresas que quieren tomar decisiones más inteligentes basadas en información real y no en suposiciones. Creamos dashboards personalizados y te ayudamos a entender tus números de forma clara, simple y visual.
-        </p>
-      </section>
-
-      {/* Benefits Cards */}
-      <section style={{
-        maxWidth: '1200px',
-        margin: '3rem auto',
-        padding: '0 2rem',
-        fontSize: '1.13rem'
-      }}>
-        <h3 style={{ textAlign: 'center', fontSize: '2rem', marginBottom: '2rem' }}>
-          ¿Por qué elegir DataO?
+        <h3 style={{ 
+          textAlign: 'center', 
+          fontSize: 'clamp(2rem, 4vw, 3rem)', 
+          marginBottom: '4rem',
+          color: '#000000',
+          fontWeight: '600',
+          letterSpacing: '-0.02em'
+        }}>
+          ¿Por qué DataO?
         </h3>
+        
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '2rem'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '4rem'
         }}>
           {[
-            { emoji: '📊', title: 'Visualización Clara', desc: 'Presentamos tus datos en dashboards intuitivos y fáciles de entender.' },
-            { emoji: '🎯', title: 'Análisis Personalizado', desc: 'Cada negocio es único. Adaptamos el análisis a tus necesidades específicas.' },
-            { emoji: '💡', title: 'Decisiones Efectivas', desc: 'Te ayudamos a tomar decisiones basadas en datos concretos y actualizados.' }
+            { 
+              emoji: '⚡', 
+              title: 'Claridad absoluta.', 
+              desc: 'Información visual. Decisiones rápidas.' 
+            },
+            { 
+              emoji: '🎯', 
+              title: 'Para tu negocio.', 
+              desc: 'Dashboards diseñados específicamente para ti.' 
+            },
+            { 
+              emoji: '💡', 
+              title: 'Datos accionables.', 
+              desc: 'No solo números. Insights que impulsan crecimiento.' 
+            }
           ].map((item, idx) => (
             <div
               key={idx}
               style={{
-                background: theme.gray,
-                borderRadius: '12px',
-                padding: '2rem',
                 textAlign: 'center',
-                transition: 'transform 0.3s, box-shadow 0.3s',
+                transition: 'transform 0.3s',
                 cursor: 'pointer'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.05) translateY(-8px)';
-                e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,255,224,0.2)';
+                e.currentTarget.style.transform = 'translateY(-10px)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1) translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
-              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>{item.emoji}</div>
-              <h4 style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>{item.title}</h4>
-              <p style={{ color: theme.darkGray }}>{item.desc}</p>
+              <div style={{ 
+                fontSize: '4rem', 
+                marginBottom: '1.5rem',
+                filter: 'grayscale(20%)'
+              }}>
+                {item.emoji}
+              </div>
+              <h4 style={{ 
+                fontSize: '1.5rem', 
+                marginBottom: '0.75rem',
+                color: '#000000',
+                fontWeight: '600',
+                letterSpacing: '-0.01em'
+              }}>
+                {item.title}
+              </h4>
+              <p style={{ 
+                color: '#86868b',
+                fontSize: '1.1rem',
+                lineHeight: '1.6'
+              }}>
+                {item.desc}
+              </p>
             </div>
           ))}
         </div>
-
       </section>
 
-      {/* Botón a Preguntas Frecuentes */}
-      <div style={{ maxWidth: '800px', margin: '2rem auto 0', textAlign: 'center' }}>
+      {/* CTA Section */}
+      <section style={{
+        textAlign: 'center',
+        padding: '6rem 2rem',
+        background: '#f5f5f7',
+        margin: '4rem 0'
+      }}>
+        <h3 style={{
+          fontSize: 'clamp(2rem, 4vw, 3rem)',
+          marginBottom: '1.5rem',
+          color: '#000000',
+          fontWeight: '600',
+          letterSpacing: '-0.02em'
+        }}>
+          Listo para empezar?
+        </h3>
+        <p style={{
+          fontSize: '1.3rem',
+          color: '#86868b',
+          marginBottom: '2.5rem',
+          maxWidth: '600px',
+          margin: '0 auto 2.5rem'
+        }}>
+          Transforma tus datos en decisiones hoy mismo.
+        </p>
         <button
+          onClick={() => onNavigate('services')}
           style={{
-            padding: '1.1rem 2.5rem',
-            background: theme.primary,
-            color: theme.secondary,
-            border: `2px solid ${theme.primary}`,
-            fontWeight: 'bold',
+            padding: '1.2rem 3rem',
+            background: '#00FFE0',
+            color: '#000000',
+            border: 'none',
+            fontWeight: '600',
             cursor: 'pointer',
-            fontSize: '22px',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-            marginBottom: '2rem',
-            transition: 'all 0.3s'
+            fontSize: '1.2rem',
+            borderRadius: '50px',
+            transition: 'all 0.3s',
+            boxShadow: '0 10px 30px rgba(0,255,224,0.3)'
           }}
-          onClick={() => {
-            if (onNavigate) {
-              onNavigate('services');
-              setTimeout(() => {
-                const faqSection = document.querySelector('.faq');
-                if (faqSection) faqSection.scrollIntoView({ behavior: 'smooth' });
-              }, 400);
-            }
+          onMouseEnter={(e) => {
+            e.target.style.transform = 'scale(1.05)';
+            e.target.style.boxShadow = '0 15px 40px rgba(0,255,224,0.4)';
           }}
-          onMouseEnter={e => {
-            e.target.style.background = theme.secondary;
-            e.target.style.color = theme.white;
-            e.target.style.borderColor = theme.secondary;
-          }}
-          onMouseLeave={e => {
-            e.target.style.background = theme.primary;
-            e.target.style.color = theme.secondary;
-            e.target.style.borderColor = theme.primary;
+          onMouseLeave={(e) => {
+            e.target.style.transform = 'scale(1)';
+            e.target.style.boxShadow = '0 10px 30px rgba(0,255,224,0.3)';
           }}
         >
-          Ir a Preguntas Frecuentes
+          Ver planes
         </button>
-      </div>
+      </section>
 
-      {/* Testimonial */}
+      {/* Testimonial - Apple Style */}
       <section style={{
-        maxWidth: '800px',
-        margin: '4rem auto',
+        maxWidth: '900px',
+        margin: '8rem auto',
         padding: '0 2rem',
-        textAlign: 'center',
-        fontSize: '1.13rem'
+        textAlign: 'center'
       }}>
-        <h3 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Lo que dicen nuestros clientes</h3>
         <blockquote style={{
-          fontStyle: 'italic',
-          fontSize: '1.2rem',
-          color: theme.darkGray,
-          padding: '2rem',
-          background: theme.gray,
-          borderLeft: `4px solid ${theme.primary}`,
-          borderRadius: '8px'
+          fontSize: 'clamp(1.3rem, 3vw, 1.8rem)',
+          color: '#000000',
+          padding: '0',
+          border: 'none',
+          fontWeight: '500',
+          lineHeight: '1.5',
+          fontStyle: 'normal',
+          marginBottom: '2rem'
         }}>
-          "Gracias a DataO entendimos qué productos eran rentables y cuáles no. Ahora tomamos decisiones basadas en datos, no en corazonadas."
+          "Ahora tomamos decisiones basadas en datos, no en corazonadas."
         </blockquote>
-        <p style={{ marginTop: '1rem', fontWeight: 'bold' }}>
-          Ana González<br/>
-          <span style={{ color: theme.darkGray }}>Dueña de EcoTiendita</span>
+        <p style={{ 
+          fontSize: '1.1rem',
+          fontWeight: '600',
+          color: '#000000',
+          marginBottom: '0.25rem'
+        }}>
+          Ana González
         </p>
-        <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+        <p style={{ 
+          color: '#86868b',
+          fontSize: '1rem'
+        }}>
+          Dueña de EcoTiendita
+        </p>
+        
+        <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
           <button
             style={{
-              padding: '1.1rem 2.5rem',
-              background: theme.primary,
-              color: theme.secondary,
-              border: `2px solid ${theme.primary}`,
-              fontWeight: 'bold',
+              padding: '1rem 2.5rem',
+              background: 'transparent',
+              color: '#000000',
+              border: '2px solid #00FFE0',
+              fontWeight: '600',
               cursor: 'pointer',
-              fontSize: '22px',
-              borderRadius: '12px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-              marginBottom: '2rem',
+              fontSize: '1.1rem',
+              borderRadius: '50px',
               transition: 'all 0.3s'
             }}
             onClick={() => onNavigate('portal')}
             onMouseEnter={e => {
-              e.target.style.background = theme.secondary;
-              e.target.style.color = theme.white;
-              e.target.style.borderColor = theme.secondary;
+              e.target.style.background = '#00FFE0';
+              e.target.style.color = '#000';
             }}
             onMouseLeave={e => {
-              e.target.style.background = theme.primary;
-              e.target.style.color = theme.secondary;
-              e.target.style.borderColor = theme.primary;
+              e.target.style.background = 'transparent';
+              e.target.style.color = '#000000';
             }}
           >
             Ver Demo
@@ -449,202 +691,624 @@ const HomePage = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* Process */}
+      {/* Process Section - Simplified Apple Style */}
       <section style={{
         maxWidth: '1200px',
-        margin: '4rem auto',
+        margin: '8rem auto 4rem',
         padding: '0 2rem'
       }}>
-        <h3 style={{ textAlign: 'center', fontSize: '2rem', marginBottom: '2rem' }}>
-          ¿Cómo funciona DataO?
+        <h3 style={{ 
+          textAlign: 'center', 
+          fontSize: 'clamp(2rem, 4vw, 3rem)', 
+          marginBottom: '4rem',
+          color: '#000000',
+          fontWeight: '600',
+          letterSpacing: '-0.02em'
+        }}>
+          Cómo funciona
         </h3>
+        
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '2rem'
+          gap: '3rem'
         }}>
           {[
-            { num: '1', title: 'Envía tus datos', desc: 'Selecciona un servicio y envíanos tu archivo (.csv, Excel o Google Sheets).' },
-            { num: '2', title: 'Proceso y limpieza', desc: 'Procesamos tus datos, limpiamos errores y generamos un dashboard informativo.' },
-            { num: '3', title: 'Recibe resultados', desc: 'Te enviamos tu dashboard por correo o WhatsApp, listo para tomar decisiones.' }
+            { num: '1', title: 'Envía tus datos', desc: 'Excel, CSV o conexión directa.' },
+            { num: '2', title: 'Creamos tu dashboard', desc: 'Limpieza, análisis y diseño personalizado.' },
+            { num: '3', title: 'Toma decisiones', desc: 'Accede a tu portal y actúa con confianza.' }
           ].map((item, idx) => (
-            <div
-              key={idx}
-              style={{
-                background: theme.white,
-                border: `2px solid ${theme.gray}`,
-                borderRadius: '12px',
-                padding: '2rem',
-                textAlign: 'center'
-              }}
-            >
+            <div key={idx} style={{ textAlign: 'center' }}>
               <div style={{
-                width: '60px',
-                height: '60px',
-                background: theme.primary,
-                color: theme.secondary,
+                width: '80px',
+                height: '80px',
+                background: '#00FFE0',
+                color: '#000',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '2rem',
-                fontWeight: 'bold',
-                margin: '0 auto 1rem'
+                fontSize: '2.5rem',
+                fontWeight: '700',
+                margin: '0 auto 1.5rem'
               }}>
                 {item.num}
               </div>
-              <h4 style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>{item.title}</h4>
-              <p style={{ color: theme.darkGray }}>{item.desc}</p>
+              <h4 style={{ 
+                fontSize: '1.5rem', 
+                marginBottom: '0.75rem',
+                color: '#000',
+                fontWeight: '600'
+              }}>
+                {item.title}
+              </h4>
+              <p style={{ 
+                color: '#86868b',
+                fontSize: '1.1rem',
+                lineHeight: '1.6'
+              }}>
+                {item.desc}
+              </p>
             </div>
           ))}
         </div>
       </section>
+
     </div>
   );
 };
 
+// SERVICES PAGE - ESTILO APPLE
 // ==========================================
-// SERVICES PAGE
-// ==========================================
+// Mantiene TODO el contenido original, solo cambia el estilo visual
+
 const ServicesPage = ({ onNavigate }) => {
   const services = [
     {
       name: 'Dashboard Básico',
-      price: '$750 MXN',
-      features: ['✓ Limpieza de datos', '✓ 2 a 3 gráficas informativas', '✓ Acceso a Portal', '⏱ 48–72h de entrega']
+      price: '$499 MXN',
+      oldPrice: '$999 MXN',
+      idealFor: 'Negocios pequeños, freelancers, emprendedores',
+      features: [
+        '✓ 4 gráficas clave',
+        '✓ 2 KPIs principales', 
+        '✓ 2 meses de acceso GRATIS',
+        '✓ 1 actualización mensual',
+        '✓ 1 revisión gratuita',
+        '✓ Sin permanencia',
+        '⏱ 3–5 días hábiles'
+      ],
+      renewal: '$200/mes después'
     },
     {
-      name: 'Análisis con Insights',
-      price: '$1500 MXN',
-      features: ['✓ Todo lo del plan básico', '✓ Informe escrito con hallazgos clave', '✓ Recomendaciones para mejorar', '✓ Soporte por WhatsApp']
+      name: 'Dashboard Pro',
+      price: '$999 MXN',
+      oldPrice: '$1,999 MXN',
+      idealFor: 'PYMEs, tiendas, restaurantes, clínicas',
+      features: [
+        '✓ 6 gráficas avanzadas',
+        '✓ 4 KPIs estratégicos',
+        '✓ 2 secciones completas',
+        '✓ 2 meses de acceso GRATIS',
+        '✓ 1 actualización mensual',
+        '✓ 2 revisiones gratuitas',
+        '✓ Soporte WhatsApp',
+        '✓ Sin permanencia'
+      ],
+      renewal: '$300/mes después'
     },
     {
-      name: 'Presentación Ejecutiva',
-      price: '$2000 MXN',
-      features: ['✓ Todo lo de los otros planes', '✓ Presentación profesional', '✓ Video o llamada explicativa', '✓ Atención personalizada']
+      name: 'Dashboard Premium',
+      price: '$1,749 MXN',
+      oldPrice: '$3,499 MXN',
+      idealFor: 'Franquicias, cadenas, consultorías, empresas',
+      features: [
+        '✓ 8 gráficas personalizadas',
+        '✓ 6 KPIs con tendencias',
+        '✓ 3 secciones completas',
+        '✓ 2 meses de acceso GRATIS',
+        '✓ Actualizaciones quincenales',
+        '✓ 3 revisiones gratuitas',
+        '✓ Capacitación (videollamada)',
+        '✓ Atención prioritaria'
+      ],
+      renewal: '$500/mes después'
     }
   ];
 
   return (
-  <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem', fontSize: '1.13rem' }}>
-      <section style={{ textAlign: 'center', padding: '3rem 1rem', background: theme.gray, borderRadius: '12px', marginBottom: '3rem' }}>
-        <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Nuestros Servicios</h2>
-        <p style={{ fontSize: '1.2rem', color: theme.darkGray }}>
-          Transformamos tus datos en decisiones claras y accionables.
-        </p>
+    <div style={{ width: '100%', margin: 0, padding: 0 }}>
+      
+      {/* Hero Section - Apple Style */}
+      <section style={{ 
+        textAlign: 'center', 
+        padding: '8rem 2rem 4rem', 
+        background: '#000000',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Efecto de brillo de fondo */}
+        <div style={{
+          position: 'absolute',
+          top: '20%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '600px',
+          height: '600px',
+          background: 'radial-gradient(circle, rgba(0,255,224,0.08) 0%, transparent 70%)',
+          pointerEvents: 'none'
+        }} />
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <h2 style={{ 
+            fontSize: 'clamp(2.5rem, 6vw, 4rem)', 
+            marginBottom: '1.5rem',
+            color: '#ffffff',
+            fontWeight: '700',
+            letterSpacing: '-0.03em',
+            lineHeight: '1.1'
+          }}>
+            Nuestros Servicios
+          </h2>
+          <p style={{ 
+            fontSize: 'clamp(1.2rem, 3vw, 1.8rem)', 
+            color: '#86868b',
+            maxWidth: '800px',
+            margin: '0 auto',
+            fontWeight: '400'
+          }}>
+            Transformamos tus datos en decisiones claras y accionables.
+          </p>
+        </div>
       </section>
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '2rem',
-        marginBottom: '3rem'
+      {/* Cards Section - Apple Style */}
+      <section style={{ 
+        maxWidth: '1400px', 
+        margin: '0 auto', 
+        padding: '4rem 2rem',
+        background: '#ffffff'
       }}>
-        {services.map((service, idx) => (
-          <div
-            key={idx}
-            style={{
-              background: theme.white,
-              border: `2px solid ${theme.gray}`,
-              borderRadius: '12px',
-              padding: '2rem',
-              textAlign: 'center',
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+          gap: '2.5rem',
+          marginBottom: '6rem'
+        }}>
+          {services.map((service, idx) => (
+            <div
+              key={idx}
+              style={{
+                background: '#ffffff',
+                border: '1px solid #d2d2d7',
+                borderRadius: '18px',
+                padding: '2.5rem',
+                textAlign: 'left',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.04)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#00FFE0';
+                e.currentTarget.style.transform = 'translateY(-8px)';
+                e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,255,224,0.12)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = '#d2d2d7';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.04)';
+              }}
+            >
+              {/* Nombre del paquete */}
+              <h3 style={{ 
+                fontSize: '1.75rem', 
+                marginBottom: '0.5rem',
+                color: '#000000',
+                fontWeight: '600',
+                letterSpacing: '-0.01em'
+              }}>
+                {service.name}
+              </h3>
+              
+              {/* Ideal para */}
+              {service.idealFor && (
+                <p style={{ 
+                  fontSize: '0.95rem', 
+                  color: '#86868b', 
+                  marginBottom: '2rem',
+                  fontWeight: '400'
+                }}>
+                  Ideal para: {service.idealFor}
+                </p>
+              )}
+
+              {/* Features */}
+              <ul style={{ 
+                textAlign: 'left', 
+                marginBottom: '2rem', 
+                listStyle: 'none', 
+                padding: 0 
+              }}>
+                {service.features.map((feature, i) => (
+                  <li key={i} style={{ 
+                    padding: '0.5rem 0', 
+                    color: '#1d1d1f',
+                    fontSize: '0.95rem',
+                    lineHeight: '1.5',
+                    borderBottom: i === service.features.length - 1 ? 'none' : '1px solid #f5f5f7'
+                  }}>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              {/* Precio */}
+              <div style={{ 
+                marginBottom: '1.5rem',
+                paddingTop: '1.5rem',
+                borderTop: '1px solid #f5f5f7'
+              }}>
+                <div style={{ 
+                  fontSize: '0.85rem', 
+                  color: '#86868b', 
+                  marginBottom: '0.5rem',
+                  fontWeight: '500',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}>
+                  Precio inicial
+                </div>
+                
+                {service.oldPrice && (
+                  <p style={{ 
+                    fontSize: '1rem', 
+                    color: '#86868b', 
+                    textDecoration: 'line-through', 
+                    marginBottom: '0.25rem',
+                    fontWeight: '400'
+                  }}>
+                    {service.oldPrice}
+                  </p>
+                )}
+                
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', marginBottom: '0.75rem' }}>
+                  <p style={{ 
+                    fontSize: '2.5rem', 
+                    fontWeight: '700', 
+                    color: '#000000', 
+                    margin: 0,
+                    letterSpacing: '-0.02em'
+                  }}>
+                    {service.price}
+                  </p>
+                  
+                  {service.oldPrice && (
+                    <div style={{ 
+                      background: '#34c759', 
+                      color: '#ffffff', 
+                      padding: '0.35rem 0.75rem', 
+                      borderRadius: '6px', 
+                      fontSize: '0.75rem', 
+                      fontWeight: '600'
+                    }}>
+                      50% OFF
+                    </div>
+                  )}
+                </div>
+
+                <p style={{ 
+                  fontSize: '0.8rem', 
+                  color: '#ff3b30', 
+                  fontWeight: '600', 
+                  marginBottom: '0.75rem' 
+                }}>
+                  ⏰ Oferta válida hasta fin de mes
+                </p>
+                
+                {service.renewal && (
+                  <p style={{ 
+                    fontSize: '0.9rem', 
+                    color: '#86868b', 
+                    fontWeight: '400'
+                  }}>
+                    Renovación: {service.renewal}
+                  </p>
+                )}
+              </div>
+
+              {/* Botones */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <button
+                  onClick={() => window.open('https://m.me/61563803638340', '_blank')}
+                  style={{
+                    width: '100%',
+                    padding: '0.9rem',
+                    background: '#000000',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: '12px',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    fontSize: '1rem',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = '#1d1d1f';
+                    e.target.style.transform = 'scale(1.02)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = '#000000';
+                    e.target.style.transform = 'scale(1)';
+                  }}
+                >
+                  Contactar
+                </button>
+                
+                <button
+                  onClick={onNavigate ? () => onNavigate('portal') : () => { window.location.hash = '#portal'; }}
+                  style={{
+                    width: '100%',
+                    padding: '0.9rem',
+                    background: 'transparent',
+                    color: '#000000',
+                    border: '2px solid #00FFE0',
+                    borderRadius: '12px',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    fontSize: '1rem',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = '#00FFE0';
+                    e.target.style.color = '#000000';
+                    e.target.style.transform = 'scale(1.02)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = 'transparent';
+                    e.target.style.color = '#000000';
+                    e.target.style.transform = 'scale(1)';
+                  }}
+                >
+                  Ver Demo
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Tabla Comparativa - SIN CAMBIOS (mantener como está) */}
+      <section style={{ 
+      
+        margin: '0 auto', 
+        padding: '4rem 2rem',
+        background: '#f5f5f7'
+      }}>
+        <h3 style={{ 
+          textAlign: 'center', 
+          fontSize: 'clamp(2rem, 4vw, 3rem)', 
+          marginBottom: '3rem', 
+          color: '#000',
+          fontWeight: '600',
+          letterSpacing: '-0.02em'
+        }}>
+        Comparativa de Paquetes
+        </h3>
+
+        <div style={{ margin: '0 auto', maxWidth: 1400, overflowX: 'auto', borderRadius: '18px', boxShadow: '0 4px 16px rgba(0,0,0,0.08)' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white', minWidth: '800px' }}>
+            <thead style={{ background: '#000', color: 'white' }}>
+              <tr>
+                <th style={{ padding: '1.5rem 1rem', fontSize: '1.1rem', fontWeight: 'bold', textAlign: 'left', background: '#1a1a1a' }}>Feature</th>
+                <th style={{ padding: '1.5rem 1rem', fontSize: '1.1rem', fontWeight: 'bold', textAlign: 'center' }}>Básico</th>
+                <th style={{ padding: '1.5rem 1rem', fontSize: '1.1rem', fontWeight: 'bold', textAlign: 'center' }}>Pro</th>
+                <th style={{ padding: '1.5rem 1rem', fontSize: '1.1rem', fontWeight: 'bold', textAlign: 'center' }}>Premium</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style={{ borderBottom: '1px solid #e5e5e5' }}>
+                <td style={{ padding: '1.25rem 1rem', fontWeight: '600', background: '#fafafa' }}>Precio inicial</td>
+                <td style={{ padding: '1.25rem 1rem', textAlign: 'center', fontSize: '1.1rem', fontWeight: 'bold' }}>
+                  <div style={{ fontSize: '0.9rem', color: '#999', textDecoration: 'line-through', marginBottom: '0.25rem' }}>$999</div>
+                  $499 MXN
+                  <div style={{ fontSize: '0.85rem', color: '#10b981', marginTop: '0.25rem' }}>50% OFF</div>
+                </td>
+                <td style={{ padding: '1.25rem 1rem', textAlign: 'center', fontSize: '1.1rem', fontWeight: 'bold' }}>
+                  <div style={{ fontSize: '0.9rem', color: '#999', textDecoration: 'line-through', marginBottom: '0.25rem' }}>$1,999</div>
+                  $999 MXN
+                  <div style={{ fontSize: '0.85rem', color: '#10b981', marginTop: '0.25rem' }}>50% OFF</div>
+                </td>
+                <td style={{ padding: '1.25rem 1rem', textAlign: 'center', fontSize: '1.1rem', fontWeight: 'bold' }}>
+                  <div style={{ fontSize: '0.9rem', color: '#999', textDecoration: 'line-through', marginBottom: '0.25rem' }}>$3,499</div>
+                  $1,749 MXN
+                  <div style={{ fontSize: '0.85rem', color: '#10b981', marginTop: '0.25rem' }}>50% OFF</div>
+                </td>
+              </tr>
+              <tr style={{ background: '#fafafa', fontStyle: 'italic', borderBottom: '1px solid #e5e5e5' }}>
+                <td style={{ padding: '1rem', fontWeight: '600' }}>Acceso portal (gratis)</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>2 meses</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>2 meses</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>2 meses</td>
+              </tr>
+              <tr style={{ background: '#fafafa', fontStyle: 'italic', borderBottom: '1px solid #e5e5e5' }}>
+                <td style={{ padding: '1rem', fontWeight: '600' }}>Renovación mensual</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>$200/mes</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>$300/mes</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>$500/mes</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid #e5e5e5' }}>
+                <td style={{ padding: '1rem', fontWeight: '600', background: '#fafafa' }}>Gráficas</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>4</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>6</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>8</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid #e5e5e5' }}>
+                <td style={{ padding: '1rem', fontWeight: '600', background: '#fafafa' }}>KPIs</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>2</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>4</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>6</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid #e5e5e5' }}>
+                <td style={{ padding: '1rem', fontWeight: '600', background: '#fafafa' }}>Secciones</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>1</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>2</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>3</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid #e5e5e5' }}>
+                <td style={{ padding: '1rem', fontWeight: '600', background: '#fafafa' }}>Actualizaciones</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>Mensuales</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>Mensuales</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>Quincenales</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid #e5e5e5' }}>
+                <td style={{ padding: '1rem', fontWeight: '600', background: '#fafafa' }}>Revisiones gratuitas</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>1</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>2</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>3</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid #e5e5e5' }}>
+                <td style={{ padding: '1rem', fontWeight: '600', background: '#fafafa' }}>Soporte</td>
+                <td style={{ padding: '1rem', textAlign: 'center', color: '#ef4444', fontSize: '1.2rem' }}>✗</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>WhatsApp</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>
+                  <span style={{ background: '#00FFE0', color: '#000', padding: '0.25rem 0.75rem', borderRadius: '20px', fontWeight: 'bold', fontSize: '0.85rem' }}>Prioritario</span>
+                </td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid #e5e5e5' }}>
+                <td style={{ padding: '1rem', fontWeight: '600', background: '#fafafa' }}>Capacitación</td>
+                <td style={{ padding: '1rem', textAlign: 'center', color: '#ef4444', fontSize: '1.2rem' }}>✗</td>
+                <td style={{ padding: '1rem', textAlign: 'center', color: '#ef4444', fontSize: '1.2rem' }}>✗</td>
+                <td style={{ padding: '1rem', textAlign: 'center', color: '#10b981', fontSize: '1.2rem' }}>✓</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid #e5e5e5' }}>
+                <td style={{ padding: '1rem', fontWeight: '600', background: '#fafafa' }}>Tiempo entrega</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>3-5 días</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>5-7 días</td>
+                <td style={{ padding: '1rem', textAlign: 'center' }}>7-10 días</td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid #e5e5e5' }}>
+                <td style={{ padding: '1rem', fontWeight: '600', background: '#fafafa' }}>Ideal para</td>
+                <td style={{ padding: '1rem', textAlign: 'center', fontSize: '0.85rem' }}>Negocios pequeños, freelancers</td>
+                <td style={{ padding: '1rem', textAlign: 'center', fontSize: '0.85rem' }}>PYMEs, tiendas, restaurantes</td>
+                <td style={{ padding: '1rem', textAlign: 'center', fontSize: '0.85rem' }}>Franquicias, cadenas, empresas</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        {/* Botones CTA */}
+        <div style={{ textAlign: 'center', marginTop: '3rem', padding: '2rem', background: '#ffffff', borderRadius: '18px' }}>
+          <button 
+            onClick={() => window.open('https://m.me/61563803638340', '_blank')}
+            style={{ 
+              padding: '1rem 3rem', 
+              background: '#000', 
+              color: '#fff', 
+              border: 'none', 
+              borderRadius: '50px', 
+              fontWeight: '600', 
+              cursor: 'pointer', 
+              margin: '0 0.5rem', 
+              fontSize: '1.1rem',
               transition: 'all 0.3s'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = theme.primary;
-              e.currentTarget.style.transform = 'translateY(-8px)';
-              e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,255,224,0.2)';
+              e.target.style.background = '#1d1d1f';
+              e.target.style.transform = 'scale(1.05)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = theme.gray;
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'none';
+              e.target.style.background = '#000';
+              e.target.style.transform = 'scale(1)';
             }}
           >
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>{service.name}</h3>
-            <ul style={{ textAlign: 'left', marginBottom: '1rem', listStyle: 'none', padding: 0 }}>
-              {service.features.map((feature, i) => (
-                <li key={i} style={{ padding: '0.5rem 0', color: theme.darkGray }}>{feature}</li>
-              ))}
-            </ul>
-            <div style={{ fontSize: '1rem', color: theme.darkGray, marginBottom: '0.25rem', fontWeight: 'bold' }}>Precio inicial</div>
-            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#000000', marginBottom: '1rem' }}>
-              {service.price}
-            </p>
-            <button
-              onClick={() => window.open('https://m.me/61563803638340', '_blank')}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                background: theme.secondary,
-                color: theme.white,
-                border: 'none',
-                borderRadius: '6px',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                marginBottom: '0.5rem'
-              }}
-            >
-              <span style={{ fontSize: '18px', display: 'inline-block' }}>Contactar</span>
-            </button>
-            <button
-              onClick={onNavigate ? () => onNavigate('portal') : () => { window.location.hash = '#portal'; }}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                background: theme.primary,
-                color: theme.secondary,
-                border: 'none',
-                borderRadius: '6px',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                marginBottom: '0.5rem',
-                marginTop: '0.25rem'
-              }}
-            >
-              <span style={{ fontSize: '18px', display: 'inline-block' }}>Ver Demo</span>
-            </button>
-          </div>
-        ))}
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '2rem' }}>
-        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-          <img src={process.env.PUBLIC_URL + '/img/tabla-servicios.png'} alt="Tabla comparativa de servicios" style={{ maxWidth: '1000px', width: '100%', height: 'auto', borderRadius: '12px', boxShadow: '0 4px 16px rgba(0,0,0,0.08)' }} />
-          <button
-            style={{ marginTop: '12px', background: theme.primary, color: theme.secondary, fontWeight: 'bold', border: 'none', borderRadius: '8px', padding: '10px 24px', cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
-            onClick={() => window.open(process.env.PUBLIC_URL + '/img/tabla-servicios.png', '_blank')}
+            Contactar
+          </button>
+          <button 
+            onClick={() => onNavigate('portal')}
+            style={{ 
+              padding: '1rem 3rem', 
+              background: 'transparent', 
+              color: '#000000', 
+              border: '2px solid #00FFE0', 
+              borderRadius: '50px', 
+              fontWeight: '600', 
+              cursor: 'pointer', 
+              margin: '0 0.5rem', 
+              fontSize: '1.1rem',
+              transition: 'all 0.3s'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = '#00FFE0';
+              e.target.style.color = '#000';
+              e.target.style.transform = 'scale(1.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'transparent';
+              e.target.style.color = '#000000';
+              e.target.style.transform = 'scale(1)';
+            }}
           >
-            Abrir imagen en nueva pestaña
+            Ver Demo
           </button>
         </div>
-      </div>
-  <section className="faq" style={{ marginTop: '4rem', maxWidth: '1000px', marginLeft: 'auto', marginRight: 'auto', background: theme.white, borderRadius: '12px', boxShadow: '0 4px 16px rgba(0,0,0,0.06)', padding: '2rem' }}>
-  <h3 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '2rem', color: '#000', fontWeight: 'bold' }}>Preguntas Frecuentes</h3>
-        <div className="faq-item" style={{ marginBottom: '1.5rem' }}>
-          <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: theme.darkGray }}>¿Qué datos necesito proporcionar?</h4>
-          <p style={{ color: theme.darkGray, lineHeight: '1.6' }}>Necesitamos acceso a tus datos en formato digital (Excel, CSV, etc.). Si no tienes los datos organizados, podemos ayudarte a limpiarlos.</p>
-        </div>
-        <div className="faq-item" style={{ marginBottom: '1.5rem' }}>
-          <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: theme.darkGray }}>¿Cuánto tiempo toma el proceso?</h4>
-          <p style={{ color: theme.darkGray, lineHeight: '1.6' }}>Dependiendo del servicio, la entrega puede ser de 48 a 72 horas para el plan básico y hasta una semana para presentaciones más complejas.</p>
-        </div>
-        <div className="faq-item" style={{ marginBottom: '1.5rem' }}>
-          <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: theme.darkGray }}>¿Puedo solicitar cambios después de recibir el servicio?</h4>
-          <p style={{ color: theme.darkGray, lineHeight: '1.6' }}>Sí, ofrecemos una revisión gratuita dentro de los primeros 7 días después de la entrega inicial.</p>
+        
+        {/* Footer info */}
+        <div style={{ textAlign: 'center', marginTop: '2rem', color: '#86868b', fontSize: '0.95rem' }}>
+          <p style={{ fontWeight: '600', color: '#ff3b30', marginBottom: '1rem' }}>⏰ Oferta válida hasta fin de mes</p>
+          <p style={{ marginBottom: '0.5rem' }}>💡 Actualización = envías tus datos actualizados, nosotros refrescamos tu dashboard</p>
+          <p style={{ marginBottom: '0.5rem' }}>📄 Formatos aceptados: Excel, CSV, Google Sheets, Bases de datos SQL</p>
+          <p>🧹 Limpieza y análisis de datos incluido en todos los planes</p>
         </div>
       </section>
-      {/* Disclaimer de precios */}
+
+      {/* FAQ Section - Apple Style */}
+      <section style={{ 
+        maxWidth: '1000px', 
+        margin: '4rem auto', 
+        padding: '4rem 2rem',
+        background: '#ffffff',
+        borderRadius: '18px'
+      }}>
+        <h3 style={{ 
+          textAlign: 'center', 
+          marginBottom: '3rem', 
+          fontSize: 'clamp(2rem, 4vw, 3rem)', 
+          color: '#000', 
+          fontWeight: '600',
+          letterSpacing: '-0.02em'
+        }}>
+          Preguntas Frecuentes
+        </h3>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <div>
+            <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem', color: '#000', fontWeight: '600' }}>¿Qué datos necesito proporcionar?</h4>
+            <p style={{ color: '#86868b', lineHeight: '1.7', fontSize: '1.05rem' }}>Necesitamos acceso a tus datos en formato digital (Excel, CSV, etc.). Si no tienes los datos organizados, podemos ayudarte a limpiarlos.</p>
+          </div>
+          
+          <div>
+            <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem', color: '#000', fontWeight: '600' }}>¿Cuánto tiempo toma el proceso?</h4>
+            <p style={{ color: '#86868b', lineHeight: '1.7', fontSize: '1.05rem' }}>Dependiendo del servicio, la entrega puede ser de 48 a 72 horas para el plan básico y hasta una semana para presentaciones más complejas.</p>
+          </div>
+          
+          <div>
+            <h4 style={{ fontSize: '1.3rem', marginBottom: '0.75rem', color: '#000', fontWeight: '600' }}>¿Puedo solicitar cambios después de recibir el servicio?</h4>
+            <p style={{ color: '#86868b', lineHeight: '1.7', fontSize: '1.05rem' }}>Sí, ofrecemos una revisión gratuita dentro de los primeros 7 días después de la entrega inicial.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Disclaimer de precios - Apple Style */}
       <div style={{
-        marginTop: '3rem',
-        padding: '1.5rem 2rem',
-        background: theme.gray,
-        borderRadius: '10px',
+        maxWidth: '1000px',
+        margin: '3rem auto 4rem',
+        padding: '2rem',
+        background: '#f5f5f7',
+        borderRadius: '18px',
         textAlign: 'center',
-        color: theme.darkGray,
-        fontSize: '1.08rem',
-        fontStyle: 'italic',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+        color: '#86868b',
+        fontSize: '0.95rem',
+        lineHeight: '1.6'
       }}>
         <span>
           * Los precios mostrados son referenciales y pueden ajustarse según las necesidades y el alcance específico de cada proyecto. Para una cotización personalizada, contáctanos y cuéntanos más sobre tus objetivos.
