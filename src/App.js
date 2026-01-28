@@ -1208,9 +1208,10 @@ const ServicesPage = ({ onNavigate }) => {
               borderRadius: '50px', 
               fontWeight: '600', 
               cursor: 'pointer', 
-              margin: '0 0.5rem', 
+              margin: '0 0.75rem', 
               fontSize: '1.1rem',
-              transition: 'all 0.3s'
+              transition: 'all 0.3s',
+              marginBottom: '.5rem'
             }}
             onMouseEnter={(e) => {
               e.target.style.background = '#1d1d1f';
@@ -1233,7 +1234,7 @@ const ServicesPage = ({ onNavigate }) => {
               borderRadius: '50px', 
               fontWeight: '600', 
               cursor: 'pointer', 
-              margin: '0 0.5rem', 
+              margin: '0 0.75rem', 
               fontSize: '1.1rem',
               transition: 'all 0.3s'
             }}
