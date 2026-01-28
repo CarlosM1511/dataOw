@@ -348,7 +348,7 @@ const PadelDashboard = ({ client }) => {
               <h1 style={{ fontSize: '2rem', fontWeight: 'bold', color: textColor, margin: 0 }}>
                 {client?.businessName || 'Club de Pádel'}
               </h1>
-              <p style={{ fontSize: '1rem', color: theme.darkGray, margin: 0, marginTop: '0.25rem' }}>Dashboard de Reservas - Enero a Marzo 2025</p>
+              <p style={{ fontSize: '1rem', color: theme.darkGray, margin: 0, marginTop: '0.25rem' }}>Dashboard de Reservas - Enero a Marzo 2026</p>
             </div>
 
             {/* Filtros */}

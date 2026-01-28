@@ -1319,23 +1319,29 @@ const ServicesPage = ({ onNavigate }) => {
 };
 
 // ==========================================
-// PORTAL LOGIN
+// PORTAL LOGIN - OPCIÓN 1: CÓDIGO AUTOMÁTICO + HINT
 // ==========================================
+// El código PADEL2026 se escribe automáticamente
+// Un hint apunta al botón "Acceder" con animación
+
 const PortalLogin = ({ onLoginSuccess }) => {
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState('PADEL2026'); // ← Código pre-llenado
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showHint, setShowHint] = useState(true); // ← Hint visible al inicio
 
   const handleLogin = async () => {
     if (!code) return;
     setLoading(true);
     setError('');
+    setShowHint(false); // Ocultar hint al hacer clic
 
     try {
       const result = await authService.login(code);
       onLoginSuccess(result.client);
     } catch (err) {
       setError(err.message);
+      setShowHint(true); // Mostrar hint de nuevo si hay error
     } finally {
       setLoading(false);
     }
@@ -1348,95 +1354,239 @@ const PortalLogin = ({ onLoginSuccess }) => {
       alignItems: 'center',
       justifyContent: 'center',
       padding: '2rem',
-      background: `linear-gradient(135deg, ${theme.secondary} 0%, #1a1a1a 100%)`
+      background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 100%)',
+      position: 'relative'
     }}>
+      {/* Efecto de brillo de fondo */}
       <div style={{
-        background: theme.white,
-        borderRadius: '20px',
-        padding: '3rem',
-        maxWidth: '450px',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '600px',
+        height: '600px',
+        background: 'radial-gradient(circle, rgba(0,255,224,0.08) 0%, transparent 70%)',
+        pointerEvents: 'none'
+      }} />
+
+      <div style={{
+        background: '#ffffff',
+        borderRadius: '24px',
+        padding: '3.5rem 3rem',
+        maxWidth: '480px',
         width: '100%',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.5)'
+        boxShadow: '0 25px 80px rgba(0,0,0,0.3)',
+        position: 'relative',
+        zIndex: 1
       }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Portal de Clientes</h2>
-          <p style={{ color: theme.darkGray }}>Ingresa tu código de acceso</p>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <h2 style={{ 
+            fontSize: '2.5rem', 
+            marginBottom: '0.75rem',
+            color: '#000000',
+            fontWeight: '700',
+            letterSpacing: '-0.02em'
+          }}>
+            Portal de Clientes
+          </h2>
+          <p style={{ 
+            color: '#86868b',
+            fontSize: '1.1rem',
+            fontWeight: '400'
+          }}>
+            Accede a tu dashboard personalizado
+          </p>
         </div>
 
+        {/* Error Message */}
         {error && (
           <div style={{
-            background: '#fee2e2',
-            color: '#991b1b',
-            padding: '1rem',
-            borderRadius: '8px',
-            marginBottom: '1rem',
-            textAlign: 'center'
+            background: '#ffebee',
+            color: '#c62828',
+            padding: '1rem 1.25rem',
+            borderRadius: '12px',
+            marginBottom: '1.5rem',
+            textAlign: 'center',
+            fontSize: '0.95rem',
+            fontWeight: '500',
+            border: '1px solid #ef9a9a'
           }}>
             {error}
           </div>
         )}
 
-        <input
-          type="text"
-          value={code}
-          onChange={(e) => setCode(e.target.value.toUpperCase())}
-          onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-          placeholder="Ej: ECOT2023"
-          style={{
-            width: '100%',
-            padding: '1rem',
-            border: `2px solid ${theme.gray}`,
-            borderRadius: '8px',
-            fontSize: '16px',
-            marginBottom: '1rem',
-            fontFamily: 'monospace',
-            letterSpacing: '2px',
-            textAlign: 'center'
-          }}
-        />
+        {/* Input Field */}
+        <div style={{ marginBottom: '1.5rem', position: 'relative' }}>
+          <label style={{
+            display: 'block',
+            fontSize: '0.85rem',
+            fontWeight: '600',
+            color: '#86868b',
+            marginBottom: '0.5rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em'
+          }}>
+            Código de acceso
+          </label>
+          <input
+            type="text"
+            value={code}
+            onChange={(e) => {
+              setCode(e.target.value.toUpperCase());
+              setShowHint(false); // Ocultar hint si el usuario escribe
+            }}
+            onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+            placeholder="Ej: PADEL2026"
+            style={{
+              width: '100%',
+              padding: '1rem 1.25rem',
+              border: '2px solid #d2d2d7',
+              borderRadius: '12px',
+              fontSize: '1.1rem',
+              fontFamily: 'monospace',
+              letterSpacing: '3px',
+              textAlign: 'center',
+              fontWeight: '600',
+              color: '#000000',
+              transition: 'all 0.3s',
+              outline: 'none'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#00FFE0';
+              e.target.style.boxShadow = '0 0 0 4px rgba(0,255,224,0.1)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#d2d2d7';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
+        </div>
 
-        <button
-          onClick={handleLogin}
-          disabled={loading}
-          style={{
-            width: '100%',
-            padding: '1rem',
-            background: theme.secondary,
-            color: theme.white,
-            border: 'none',
-            borderRadius: '8px',
-            fontWeight: 'bold',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            fontSize: '16px',
-            opacity: loading ? 0.6 : 1
-          }}
-        >
-          {loading ? 'Verificando...' : '🔐 Acceder'}
-        </button>
+        {/* Botón de Acceso con Hint Animado */}
+        <div style={{ position: 'relative' }}>
+          <button
+            onClick={handleLogin}
+            disabled={loading}
+            style={{
+              width: '100%',
+              padding: '1rem',
+              background: loading ? '#86868b' : '#000000',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '12px',
+              fontWeight: '600',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              fontSize: '1.1rem',
+              transition: 'all 0.3s',
+              position: 'relative'
+            }}
+            onMouseEnter={(e) => {
+              if (!loading) {
+                e.target.style.background = '#1d1d1f';
+                e.target.style.transform = 'scale(1.02)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!loading) {
+                e.target.style.background = '#000000';
+                e.target.style.transform = 'scale(1)';
+              }
+            }}
+          >
+            {loading ? 'Verificando...' : 'Acceder'}
+          </button>
 
-        <details style={{ marginTop: '2rem', textAlign: 'center' }}>
-          <summary style={{ cursor: 'pointer', color: theme.darkGray, fontSize: '14px' }}>
-            Ver códigos de prueba
-          </summary>
-          <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {['PADEL2026'].map(c => (
-              <code
-                key={c}
-                onClick={() => setCode(c)}
-                style={{
-                  background: theme.gray,
-                  padding: '0.5rem 1rem',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontSize: '13px'
-                }}
-              >
-                {c}
-              </code>
-            ))}
-          </div>
-        </details>
+          {/* Hint Animado (solo visible al inicio) */}
+          {showHint && !loading && (
+            <div style={{
+              position: 'absolute',
+              right: '-120px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              animation: 'pulse 2s ease-in-out infinite'
+            }}>
+              <div style={{
+                background: '#00FFE0',
+                color: '#000000',
+                padding: '0.5rem 1rem',
+                borderRadius: '20px',
+                fontSize: '0.85rem',
+                fontWeight: '600',
+                boxShadow: '0 4px 12px rgba(0,255,224,0.3)',
+                whiteSpace: 'nowrap'
+              }}>
+                👈 Prueba el demo
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Info adicional */}
+        <div style={{
+          marginTop: '2rem',
+          textAlign: 'center',
+          padding: '1rem',
+          background: '#f5f5f7',
+          borderRadius: '12px'
+        }}>
+          <p style={{
+            fontSize: '0.9rem',
+            color: '#86868b',
+            margin: 0,
+            lineHeight: '1.5'
+          }}>
+            💡 Código de prueba pre-cargado.<br/>
+            Haz clic en "Acceder" para explorar el demo.
+          </p>
+        </div>
+
+        {/* Link de ayuda */}
+        <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+          <p style={{ fontSize: '0.9rem', color: '#86868b' }}>
+            ¿No tienes código?{' '}
+            <a 
+              href="https://m.me/61563803638340" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ 
+                color: '#00FFE0', 
+                textDecoration: 'none',
+                fontWeight: '600'
+              }}
+            >
+              Contáctanos
+            </a>
+          </p>
+        </div>
       </div>
+
+      {/* CSS para animación del hint */}
+      <style>{`
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+          }
+          50% {
+            opacity: 0.7;
+            transform: translateY(-50%) translateX(-5px);
+          }
+        }
+
+        @media (max-width: 768px) {
+          /* Hint se mueve arriba en móvil */
+          div[style*="right: '-120px'"] {
+            right: auto !important;
+            top: -60px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };
@@ -1516,52 +1666,523 @@ const PortalDashboard = ({ client, onLogout }) => {
 };
 
 // ==========================================
-// CONTACT PAGE
+// CONTACT PAGE - ESTILO APPLE
 // ==========================================
+
 const ContactPage = () => {
   return (
-    <div style={{
-      minHeight: 'calc(100vh - 150px)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '2rem'
-    }}>
-      <div style={{
-        background: theme.white,
-        borderRadius: '20px',
-        padding: '3rem',
-        maxWidth: '600px',
-        width: '100%',
+    <div style={{ width: '100%', margin: 0, padding: 0 }}>
+      
+      {/* Hero Section con fondo oscuro */}
+      <section style={{
+        background: 'linear-gradient(135deg, #000000 0%, #1a1a1a 100%)',
+        padding: '8rem 2rem 6rem',
         textAlign: 'center',
-        boxShadow: '0 8px 24px rgba(0,0,0,0.1)'
+        position: 'relative',
+        overflow: 'hidden'
       }}>
-        <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>¿Hablamos?</h2>
-        <p style={{ fontSize: '1.2rem', color: theme.darkGray, marginBottom: '1rem' }}>
-          Atendemos tus dudas y proyectos por Messenger en tiempo real.
-        </p>
-        <p style={{ color: theme.darkGray, marginBottom: '2rem' }}>
-          Horario: Lunes a Sábado · 10am a 6pm
-        </p>
-        <a
-          href="https://m.me/61563803638340"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'inline-block',
-            padding: '1rem 2rem',
-            background: '#0084ff',
-            color: theme.white,
-            textDecoration: 'none',
-            borderRadius: '50px',
-            fontWeight: 'bold',
-            fontSize: '1.1rem',
-            boxShadow: '0 4px 12px rgba(0,132,255,0.3)'
+        {/* Efecto de brillo de fondo */}
+        <div style={{
+          position: 'absolute',
+          top: '30%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '600px',
+          height: '600px',
+          background: 'radial-gradient(circle, rgba(0,255,224,0.08) 0%, transparent 70%)',
+          pointerEvents: 'none'
+        }} />
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <h2 style={{
+            fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+            marginBottom: '1.5rem',
+            color: '#ffffff',
+            fontWeight: '700',
+            letterSpacing: '-0.03em',
+            lineHeight: '1.1'
+          }}>
+            Hablemos de tu proyecto.
+          </h2>
+          <p style={{
+            fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
+            color: '#86868b',
+            maxWidth: '800px',
+            margin: '0 auto',
+            fontWeight: '400'
+          }}>
+            Estamos listos para transformar tus datos en decisiones inteligentes.
+          </p>
+        </div>
+      </section>
+
+      {/* Sección principal con cards */}
+      <section style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '4rem 2rem',
+        background: '#ffffff'
+      }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '2.5rem',
+          marginBottom: '4rem'
+        }}>
+          {/* Card Messenger */}
+          <div style={{
+            background: '#ffffff',
+            border: '1px solid #d2d2d7',
+            borderRadius: '18px',
+            padding: '3rem 2.5rem',
+            textAlign: 'center',
+            transition: 'all 0.3s',
+            cursor: 'pointer',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.04)'
           }}
-        >
-          💬 Escríbenos por Messenger
-        </a>
-      </div>
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = '#0084ff';
+            e.currentTarget.style.transform = 'translateY(-8px)';
+            e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,132,255,0.15)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = '#d2d2d7';
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.04)';
+          }}
+          >
+            {/* Icono */}
+            <div style={{
+              width: '80px',
+              height: '80px',
+              background: 'linear-gradient(135deg, #0084ff 0%, #0066cc 100%)',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.5rem',
+              fontSize: '2.5rem',
+              boxShadow: '0 10px 30px rgba(0,132,255,0.3)'
+            }}>
+              💬
+            </div>
+
+            <h3 style={{
+              fontSize: '1.75rem',
+              marginBottom: '1rem',
+              color: '#000000',
+              fontWeight: '600',
+              letterSpacing: '-0.01em'
+            }}>
+              Messenger
+            </h3>
+
+            <p style={{
+              color: '#86868b',
+              fontSize: '1.05rem',
+              lineHeight: '1.6',
+              marginBottom: '1.5rem'
+            }}>
+              Respuesta en tiempo real para tus dudas y proyectos.
+            </p>
+
+            <div style={{
+              background: '#f5f5f7',
+              padding: '1rem',
+              borderRadius: '12px',
+              marginBottom: '2rem'
+            }}>
+              <p style={{
+                fontSize: '0.9rem',
+                color: '#86868b',
+                margin: 0,
+                fontWeight: '500'
+              }}>
+                📅 Lunes a Sábado<br/>
+                🕐 10:00 AM - 6:00 PM
+              </p>
+            </div>
+
+            <a
+              href="https://m.me/61563803638340"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-block',
+                padding: '1rem 2.5rem',
+                background: '#0084ff',
+                color: '#ffffff',
+                textDecoration: 'none',
+                borderRadius: '50px',
+                fontWeight: '600',
+                fontSize: '1.05rem',
+                transition: 'all 0.3s',
+                boxShadow: '0 4px 16px rgba(0,132,255,0.3)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = '#0066cc';
+                e.target.style.transform = 'scale(1.05)';
+                e.target.style.boxShadow = '0 6px 20px rgba(0,132,255,0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = '#0084ff';
+                e.target.style.transform = 'scale(1)';
+                e.target.style.boxShadow = '0 4px 16px rgba(0,132,255,0.3)';
+              }}
+            >
+              Abrir Messenger
+            </a>
+          </div>
+
+          {/* Card Email */}
+          <div style={{
+            background: '#ffffff',
+            border: '1px solid #d2d2d7',
+            borderRadius: '18px',
+            padding: '3rem 2.5rem',
+            textAlign: 'center',
+            transition: 'all 0.3s',
+            cursor: 'pointer',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.04)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = '#00FFE0';
+            e.currentTarget.style.transform = 'translateY(-8px)';
+            e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,255,224,0.15)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = '#d2d2d7';
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.04)';
+          }}
+          >
+            {/* Icono */}
+            <div style={{
+              width: '80px',
+              height: '80px',
+              background: 'linear-gradient(135deg, #00FFE0 0%, #00d4c0 100%)',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.5rem',
+              fontSize: '2.5rem',
+              boxShadow: '0 10px 30px rgba(0,255,224,0.3)'
+            }}>
+              ✉️
+            </div>
+
+            <h3 style={{
+              fontSize: '1.75rem',
+              marginBottom: '1rem',
+              color: '#000000',
+              fontWeight: '600',
+              letterSpacing: '-0.01em'
+            }}>
+              Email
+            </h3>
+
+            <p style={{
+              color: '#86868b',
+              fontSize: '1.05rem',
+              lineHeight: '1.6',
+              marginBottom: '1.5rem'
+            }}>
+              Para proyectos más detallados o cotizaciones formales.
+            </p>
+
+            <div style={{
+              background: '#f5f5f7',
+              padding: '1rem',
+              borderRadius: '12px',
+              marginBottom: '2rem'
+            }}>
+              <p style={{
+                fontSize: '0.95rem',
+                color: '#000000',
+                margin: 0,
+                fontWeight: '600',
+                fontFamily: 'monospace'
+              }}>
+                oficialdatao@gmail.com
+              </p>
+              <p style={{
+                fontSize: '0.85rem',
+                color: '#86868b',
+                margin: '0.5rem 0 0',
+                fontWeight: '400'
+              }}>
+                Respuesta en 24-48 horas
+              </p>
+            </div>
+
+            <a
+              href="mailto:oficialdatao@gmail.com"
+              style={{
+                display: 'inline-block',
+                padding: '1rem 2.5rem',
+                background: 'transparent',
+                color: '#00FFE0',
+                textDecoration: 'none',
+                borderRadius: '50px',
+                fontWeight: '600',
+                fontSize: '1.05rem',
+                border: '2px solid #00FFE0',
+                transition: 'all 0.3s'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = '#00FFE0';
+                e.target.style.color = '#000000';
+                e.target.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'transparent';
+                e.target.style.color = '#00FFE0';
+                e.target.style.transform = 'scale(1)';
+              }}
+            >
+              Enviar Email
+            </a>
+          </div>
+
+          {/* Card WhatsApp (Opcional - puedes eliminar si no tienes) */}
+          <div style={{
+            background: '#ffffff',
+            border: '1px solid #d2d2d7',
+            borderRadius: '18px',
+            padding: '3rem 2.5rem',
+            textAlign: 'center',
+            transition: 'all 0.3s',
+            cursor: 'pointer',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.04)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = '#25D366';
+            e.currentTarget.style.transform = 'translateY(-8px)';
+            e.currentTarget.style.boxShadow = '0 20px 40px rgba(37,211,102,0.15)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = '#d2d2d7';
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.04)';
+          }}
+          >
+            {/* Icono */}
+            <div style={{
+              width: '80px',
+              height: '80px',
+              background: 'linear-gradient(135deg, #25D366 0%, #20ba5a 100%)',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.5rem',
+              fontSize: '2.5rem',
+              boxShadow: '0 10px 30px rgba(37,211,102,0.3)'
+            }}>
+              📱
+            </div>
+
+            <h3 style={{
+              fontSize: '1.75rem',
+              marginBottom: '1rem',
+              color: '#000000',
+              fontWeight: '600',
+              letterSpacing: '-0.01em'
+            }}>
+              WhatsApp
+            </h3>
+
+            <p style={{
+              color: '#86868b',
+              fontSize: '1.05rem',
+              lineHeight: '1.6',
+              marginBottom: '1.5rem'
+            }}>
+              Consultas rápidas y seguimiento de proyectos activos.
+            </p>
+
+            <div style={{
+              background: '#f5f5f7',
+              padding: '1rem',
+              borderRadius: '12px',
+              marginBottom: '2rem'
+            }}>
+              <p style={{
+                fontSize: '0.9rem',
+                color: '#86868b',
+                margin: 0,
+                fontWeight: '500'
+              }}>
+                Próximamente<br/>
+                <span style={{ fontSize: '0.8rem' }}>Mientras tanto, usa Messenger 💬</span>
+              </p>
+            </div>
+
+            <button
+              disabled
+              style={{
+                padding: '1rem 2.5rem',
+                background: '#f5f5f7',
+                color: '#86868b',
+                border: 'none',
+                borderRadius: '50px',
+                fontWeight: '600',
+                fontSize: '1.05rem',
+                cursor: 'not-allowed',
+                opacity: 0.5
+              }}
+            >
+              Próximamente
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ rápido */}
+      <section style={{
+        background: '#f5f5f7',
+        padding: '5rem 2rem',
+      }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h3 style={{
+            textAlign: 'center',
+            fontSize: 'clamp(2rem, 4vw, 3rem)',
+            marginBottom: '3rem',
+            color: '#000000',
+            fontWeight: '600',
+            letterSpacing: '-0.02em'
+          }}>
+            ¿Tienes dudas?
+          </h3>
+
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1.5rem'
+          }}>
+            {[
+              {
+                q: '¿Cuánto tarda la primera respuesta?',
+                a: 'En Messenger respondemos en minutos durante horario de atención. Por email, máximo 48 horas.'
+              },
+              {
+                q: '¿Puedo agendar una videollamada?',
+                a: 'Sí, escríbenos por Messenger y coordinamos una sesión según tu disponibilidad.'
+              },
+              {
+                q: '¿Atienden fuera de horario?',
+                a: 'Los mensajes enviados fuera de horario se responden al siguiente día hábil.'
+              }
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                style={{
+                  background: '#ffffff',
+                  padding: '2rem',
+                  borderRadius: '16px',
+                  border: '1px solid #d2d2d7',
+                  transition: 'all 0.3s'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#00FFE0';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,255,224,0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#d2d2d7';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <h4 style={{
+                  fontSize: '1.2rem',
+                  marginBottom: '0.75rem',
+                  color: '#000000',
+                  fontWeight: '600'
+                }}>
+                  {item.q}
+                </h4>
+                <p style={{
+                  color: '#86868b',
+                  fontSize: '1.05rem',
+                  lineHeight: '1.6',
+                  margin: 0
+                }}>
+                  {item.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Final */}
+      <section style={{
+        textAlign: 'center',
+        padding: '6rem 2rem',
+        background: '#000000',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Efecto de brillo */}
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '800px',
+          height: '800px',
+          background: 'radial-gradient(circle, rgba(0,255,224,0.08) 0%, transparent 70%)',
+          pointerEvents: 'none'
+        }} />
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <h3 style={{
+            fontSize: 'clamp(2rem, 4vw, 3rem)',
+            marginBottom: '1.5rem',
+            color: '#ffffff',
+            fontWeight: '600',
+            letterSpacing: '-0.02em'
+          }}>
+            ¿Listo para empezar?
+          </h3>
+          <p style={{
+            fontSize: '1.3rem',
+            color: '#86868b',
+            marginBottom: '2.5rem',
+            maxWidth: '600px',
+            margin: '0 auto 2.5rem'
+          }}>
+            Hablemos hoy mismo sobre tu proyecto.
+          </p>
+          <a
+            href="https://m.me/61563803638340"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-block',
+              padding: '1.2rem 3rem',
+              background: '#00FFE0',
+              color: '#000000',
+              textDecoration: 'none',
+              borderRadius: '50px',
+              fontWeight: '600',
+              fontSize: '1.2rem',
+              transition: 'all 0.3s',
+              boxShadow: '0 10px 30px rgba(0,255,224,0.3)'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = 'scale(1.05)';
+              e.target.style.boxShadow = '0 15px 40px rgba(0,255,224,0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = 'scale(1)';
+              e.target.style.boxShadow = '0 10px 30px rgba(0,255,224,0.3)';
+            }}
+          >
+            Iniciar conversación
+          </a>
+        </div>
+      </section>
     </div>
   );
 };
