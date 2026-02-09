@@ -82,7 +82,7 @@ const Header = ({ currentPage, onNavigate }) => {
 
   const navItems = [
     { id: 'home', label: 'Home' },
-    { id: 'services', label: 'Servicios' },
+    { id: 'services', label: 'Servicio' },
     { id: 'portal', label: 'Portal Clientes' },
     { id: 'contact', label: 'Contacto' }
   ];
@@ -469,7 +469,7 @@ const HomePage = ({ onNavigate }) => {
                 e.target.style.transform = 'scale(1)';
               }}
             >
-              Ver planes
+              Ver servicio
             </button>
           </div>
 
@@ -625,7 +625,7 @@ const HomePage = ({ onNavigate }) => {
             e.target.style.boxShadow = '0 10px 30px rgba(0,255,224,0.3)';
           }}
         >
-          Ver planes
+          Ver servicio
         </button>
       </section>
 
@@ -764,8 +764,8 @@ const HomePage = ({ onNavigate }) => {
 
 const ServicesPage = ({ onNavigate }) => {
   const services = [
-    {
-      name: 'Dashboard Básico',
+    /*{
+       name: 'Dashboard Básico',
       price: '$499 MXN',
       oldPrice: '$999 MXN',
       idealFor: 'Negocios pequeños, freelancers, emprendedores',
@@ -779,12 +779,12 @@ const ServicesPage = ({ onNavigate }) => {
         '⏱ 3–5 días hábiles'
       ],
       renewal: '$200/mes después'
-    },
+    }, */
     {
-      name: 'Dashboard Pro',
+      name: 'Dashboard Profesional',
       price: '$999 MXN',
       oldPrice: '$1,999 MXN',
-      idealFor: 'PYMEs, tiendas, restaurantes, clínicas',
+      idealFor: 'PYMEs, tiendas, restaurantes, clínicas, negocios en crecimiento',
       features: [
         '✓ 6 gráficas avanzadas',
         '✓ 4 KPIs estratégicos',
@@ -797,7 +797,7 @@ const ServicesPage = ({ onNavigate }) => {
       ],
       renewal: '$300/mes después'
     },
-    {
+    /*{
       name: 'Dashboard Premium',
       price: '$1,749 MXN',
       oldPrice: '$3,499 MXN',
@@ -813,7 +813,7 @@ const ServicesPage = ({ onNavigate }) => {
         '✓ Atención prioritaria'
       ],
       renewal: '$500/mes después'
-    }
+    }*/
   ];
 
   return (
@@ -848,7 +848,7 @@ const ServicesPage = ({ onNavigate }) => {
             letterSpacing: '-0.03em',
             lineHeight: '1.1'
           }}>
-            Nuestros Servicios
+            Nuestros Servicio
           </h2>
           <p style={{ 
             fontSize: 'clamp(1.2rem, 3vw, 1.8rem)', 
@@ -873,7 +873,7 @@ const ServicesPage = ({ onNavigate }) => {
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
           gap: '2.5rem',
-          marginBottom: '6rem'
+          marginBottom: '0rem'
         }}>
           {services.map((service, idx) => (
             <div
@@ -1078,7 +1078,7 @@ const ServicesPage = ({ onNavigate }) => {
       </section>
 
       {/* Tabla Comparativa - SIN CAMBIOS (mantener como está) */}
-      <section style={{ 
+      {/* <section style={{ 
       
         margin: '0 auto', 
         padding: '4rem 2rem',
@@ -1196,7 +1196,8 @@ const ServicesPage = ({ onNavigate }) => {
           </table>
         </div>
         
-        {/* Botones CTA */}
+         
+
         <div style={{ textAlign: 'center', marginTop: '3rem', padding: '2rem', background: '#ffffff', borderRadius: '18px' }}>
           <button 
             onClick={() => window.open('https://m.me/61563803638340', '_blank')}
@@ -1253,14 +1254,14 @@ const ServicesPage = ({ onNavigate }) => {
           </button>
         </div>
         
-        {/* Footer info */}
+        
         <div style={{ textAlign: 'center', marginTop: '2rem', color: '#86868b', fontSize: '0.95rem' }}>
           <p style={{ fontWeight: '600', color: '#ff3b30', marginBottom: '1rem' }}>⏰ Oferta válida hasta fin de mes</p>
           <p style={{ marginBottom: '0.5rem' }}>💡 Actualización = envías tus datos actualizados, nosotros refrescamos tu dashboard</p>
           <p style={{ marginBottom: '0.5rem' }}>📄 Formatos aceptados: Excel, CSV, Google Sheets, Bases de datos SQL</p>
           <p>🧹 Limpieza y análisis de datos incluido en todos los planes</p>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ Section - Apple Style */}
       <section style={{ 
@@ -1669,6 +1670,10 @@ const PortalDashboard = ({ client, onLogout }) => {
 // ==========================================
 // CONTACT PAGE - ESTILO APPLE
 // ==========================================
+const handleCopyEmail = () => {
+  navigator.clipboard.writeText('oficialdatao@gmail.com');
+  // Mostrar feedback visual
+};
 
 const ContactPage = () => {
   return (
@@ -1917,8 +1922,8 @@ const ContactPage = () => {
               </p>
             </div>
 
-            <a
-              href="mailto:oficialdatao@gmail.com"
+            <button
+              onClick={handleCopyEmail}
               style={{
                 display: 'inline-block',
                 padding: '1rem 2.5rem',
@@ -1942,8 +1947,8 @@ const ContactPage = () => {
                 e.target.style.transform = 'scale(1)';
               }}
             >
-              Enviar Email
-            </a>
+              Copiar Email
+            </button>
           </div>
 
           {/* Card WhatsApp (Opcional - puedes eliminar si no tienes) */}
