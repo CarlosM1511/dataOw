@@ -758,32 +758,492 @@ const HomePage = ({ onNavigate }) => {
   );
 };
 
+// ==========================================
+// COTIZADOR INTELIGENTE
+// ==========================================
+
+const CYAN = "#00FFE0";
+
+// ─── Catálogos ──────────────────────────────────────────────
+
+const BUSINESS_TYPES = [
+  { id: "restaurant",  label: "🍽️ Restaurante / Bar",        complexity: 1 },
+  { id: "retail",      label: "🛍️ Tienda / Retail",          complexity: 1 },
+  { id: "clinic",      label: "🏥 Clínica / Salud",           complexity: 2 },
+  { id: "gym",         label: "💪 Gimnasio / Deporte",        complexity: 1 },
+  { id: "realestate",  label: "🏠 Inmobiliaria",              complexity: 2 },
+  { id: "ecommerce",   label: "🛒 E-commerce",                complexity: 2 },
+  { id: "franchise",   label: "🏢 Franquicia / Cadena",       complexity: 3 },
+  { id: "consulting",  label: "📊 Consultoría / Servicios",   complexity: 2 },
+  { id: "other",       label: "🔧 Otro",                      complexity: 1 },
+];
+
+const DATA_VOLUMES = [
+  {
+    id: "xs",
+    label: "Menos de 500 filas",
+    sublabel: "Ej. registro semanal pequeño, negocio nuevo",
+    score: 0,
+    surcharge: 0,
+    minPlan: null,
+    badge: null,
+  },
+  {
+    id: "sm",
+    label: "500 – 5,000 filas",
+    sublabel: "Ej. ventas mensuales de tienda o restaurante",
+    score: 1,
+    surcharge: 0,
+    minPlan: null,
+    badge: null,
+  },
+  {
+    id: "md",
+    label: "5,000 – 25,000 filas",
+    sublabel: "Ej. transacciones anuales de e-commerce o clínica",
+    score: 2,
+    surcharge: 900,
+    minPlan: "pro",
+    badge: "Requiere mínimo Plan Pro",
+  },
+  {
+    id: "lg",
+    label: "25,000 – 100,000 filas",
+    sublabel: "Ej. registros de cadena, franquicia o ERP",
+    score: 3,
+    surcharge: 2250,
+    minPlan: "premium",
+    badge: "Requiere Plan Premium",
+  },
+  {
+    id: "xl",
+    label: "Más de 100,000 filas",
+    sublabel: "Big Data — requiere arquitectura especial",
+    score: 4,
+    surcharge: 4050,
+    minPlan: "premium",
+    badge: "🔥 Big Data — cotización personalizada",
+  },
+];
+
+const DATA_SOURCES = [
+  { id: "excel",  label: "Excel / CSV",        cost: 0 },
+  { id: "sheets", label: "Google Sheets",      cost: 0 },
+  { id: "pos",    label: "Sistema POS",        cost: 450 },
+  { id: "sql",    label: "Base de datos SQL",  cost: 900 },
+  { id: "api",    label: "API externa",        cost: 1350 },
+  { id: "multi",  label: "+3 fuentes mixtas",  cost: 1800 },
+];
+
+const FREQUENCIES = [
+  { id: "monthly",  label: "Mensual",      surcharge: 0,    multiplier: 1.0, renewalMult: 1.0 },
+  { id: "biweekly", label: "Quincenal",    surcharge: 450,  multiplier: 1.2, renewalMult: 1.2 },
+  { id: "weekly",   label: "Semanal",      surcharge: 1050, multiplier: 1.5, renewalMult: 1.5 },
+  { id: "realtime", label: "Tiempo real",  surcharge: 2250, multiplier: 2.0, renewalMult: 2.0 },
+];
+
+const BUDGETS = [
+  { id: "low",  label: "Menos de $2,500 MXN",          max: 2499 },
+  { id: "mid",  label: "$2,500 – $5,000 MXN",          max: 5000 },
+  { id: "high", label: "$5,000 – $10,000 MXN",         max: 10000 },
+  { id: "open", label: "Sin límite, quiero lo mejor",   max: 99999 },
+];
+
+const PLANS = {
+  basico:  { name: "Básico",  base: 2247,  renewal: 900,  graphs: 4, kpis: 2, sections: 1, support: "—",           delivery: "3–5 días",  color: "#10b981", badge: "Starter" },
+  pro:     { name: "Pro",     base: 4497,  renewal: 1350, graphs: 6, kpis: 4, sections: 2, support: "WhatsApp",    delivery: "5–7 días",  color: "#3b82f6", badge: "Más popular ⭐" },
+  premium: { name: "Premium", base: 7872,  renewal: 2250, graphs: 8, kpis: 6, sections: 3, support: "Prioritario", delivery: "7–10 días", color: "#f59e0b", badge: "Top tier 🏆" },
+};
+
+const PLAN_ORDER = ["basico", "pro", "premium"];
+
+// ─── Algoritmo ──────────────────────────────────────────────
+
+function calculateQuote({ businessType, dataVolume, dataSource, frequency, budget }) {
+  const biz  = BUSINESS_TYPES.find(b => b.id === businessType);
+  const vol  = DATA_VOLUMES.find(v => v.id === dataVolume);
+  const src  = DATA_SOURCES.find(d => d.id === dataSource);
+  const freq = FREQUENCIES.find(f => f.id === frequency);
+  const budg = BUDGETS.find(b => b.id === budget);
+
+  if (!biz || !vol || !src || !freq || !budg) return null;
+
+  // 1. Score base → determina plan inicial
+  const score =
+    biz.complexity * 2 +
+    vol.score * 2 +
+    (src.cost > 0 ? 2 : 0) +
+    (freq.multiplier > 1.2 ? 2 : freq.multiplier > 1 ? 1 : 0);
+
+  let planKey = score <= 4 ? "basico" : score <= 9 ? "pro" : "premium";
+
+  // 2. Override por volumen — upgrade forzado si el volumen lo requiere
+  if (vol.minPlan) {
+    const currentIdx = PLAN_ORDER.indexOf(planKey);
+    const minIdx     = PLAN_ORDER.indexOf(vol.minPlan);
+    if (minIdx > currentIdx) planKey = vol.minPlan;
+  }
+
+  // 3. Override por presupuesto — downgrade si no alcanza
+  const budgetOverride = budget !== "open";
+  if (budgetOverride) {
+    const base = PLANS[planKey].base + vol.surcharge;
+    if (budg.max < base) {
+      const affordable = PLAN_ORDER.slice().reverse().find(k => PLANS[k].base + vol.surcharge <= budg.max);
+      if (affordable) planKey = affordable;
+    }
+  }
+
+  const plan = PLANS[planKey];
+
+  // 4. Precio final — frecuencia suma costo fijo + multiplica renovación
+  const extras          = src.cost + vol.surcharge + freq.surcharge;
+  const adjustedBase    = Math.round(plan.base + extras);
+  const adjustedRenewal = Math.round(plan.renewal * freq.renewalMult);
+
+  const fits      = adjustedBase <= budg.max || budget === "open";
+  const isBigData = dataVolume === "xl";
+
+  // 5. Desglose de precio
+  const breakdown = [
+    { label: `Plan ${plan.name} (base)`,                          amount: plan.base },
+    ...(vol.surcharge  > 0 ? [{ label: `Volumen: ${vol.label}`,          amount: vol.surcharge  }] : []),
+    ...(src.cost       > 0 ? [{ label: `Integración: ${src.label}`,      amount: src.cost       }] : []),
+    ...(freq.surcharge > 0 ? [{ label: `Frecuencia: ${freq.label}`,      amount: freq.surcharge }] : []),
+  ];
+
+  // 6. Mensaje Messenger
+  const msg = encodeURIComponent(
+    `Hola DataO 👋 Me interesa una cotización.\n\n` +
+    `📌 Plan recomendado: ${plan.name}\n` +
+    `📊 Negocio: ${biz.label}\n` +
+    `📦 Volumen de datos: ${vol.label}\n` +
+    `📁 Fuente: ${src.label}\n` +
+    `🔄 Actualización: ${freq.label}\n` +
+    `💰 Presupuesto: ${budg.label}\n\n` +
+    `➡️ Estimado: $${adjustedBase.toLocaleString()} MXN iniciales\n` +
+    `   Renovación: $${adjustedRenewal.toLocaleString()}/mes`
+  );
+
+  return { planKey, plan, adjustedBase, adjustedRenewal, fits, isBigData, breakdown, freq, vol, msg };
+}
+
+// ─── UI Helpers ─────────────────────────────────────────────
+
+const STEPS = ["Negocio", "Volumen", "Datos", "Frecuencia", "Presupuesto"];
+
+function StepBar({ current }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", marginBottom: "2rem" }}>
+      {STEPS.map((s, i) => (
+        <div key={s} style={{ display: "flex", alignItems: "center", flex: 1 }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flex: 1 }}>
+            <div style={{
+              width: 28, height: 28, borderRadius: "50%", display: "flex", alignItems: "center",
+              justifyContent: "center", fontWeight: 700, fontSize: 11,
+              background: i < current ? CYAN : i === current ? "#000" : "#111",
+              color: i < current ? "#000" : i === current ? CYAN : "#333",
+              border: `2px solid ${i <= current ? CYAN : "#222"}`,
+              transition: "all .3s",
+            }}>
+              {i < current ? "✓" : i + 1}
+            </div>
+            <span style={{ fontSize: 9, color: i <= current ? CYAN : "#333", marginTop: 3, whiteSpace: "nowrap", fontWeight: i === current ? 700 : 400 }}>
+              {s}
+            </span>
+          </div>
+          {i < STEPS.length - 1 && (
+            <div style={{ height: 2, flex: 1, background: i < current ? CYAN : "#1a1a1a", transition: "background .3s", marginBottom: 14 }} />
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function OptionCard({ selected, onClick, children, highlight }) {
+  return (
+    <button onClick={onClick} style={{
+      background: selected ? `${CYAN}12` : highlight ? "#0f1a17" : "#0d0d0d",
+      border: `2px solid ${selected ? CYAN : highlight ? `${CYAN}30` : "#1e1e1e"}`,
+      borderRadius: 10, padding: "0.85rem 1rem", cursor: "pointer",
+      textAlign: "left", transition: "all .2s", color: selected ? CYAN : "#ccc",
+      fontWeight: selected ? 700 : 400, fontSize: 13, width: "100%",
+      boxShadow: selected ? `0 0 14px ${CYAN}22` : "none",
+    }}>
+      {children}
+    </button>
+  );
+}
+
+function Breakdown({ items, total }) {
+  return (
+    <div style={{ background: "#050505", border: "1px solid #1a1a1a", borderRadius: 10, padding: "1rem 1.25rem", marginBottom: "1.25rem" }}>
+      <p style={{ fontSize: 10, color: CYAN, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Desglose del precio</p>
+      {items.map((item, i) => (
+        <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "5px 0", borderBottom: i < items.length - 1 ? "1px solid #111" : "none" }}>
+          <span style={{ fontSize: 12, color: "#666" }}>{item.label}</span>
+          <span style={{ fontSize: 12, color: item.amount ? "#aaa" : CYAN, fontWeight: item.note ? 700 : 400 }}>
+            {item.note ? item.note : item.amount ? `+$${item.amount.toLocaleString()}` : ""}
+          </span>
+        </div>
+      ))}
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10, paddingTop: 8, borderTop: `1px solid ${CYAN}30` }}>
+        <span style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>Total estimado</span>
+        <span style={{ fontSize: 13, fontWeight: 900, color: CYAN }}>${total.toLocaleString()} MXN</span>
+      </div>
+    </div>
+  );
+}
+
+function ResultCard({ result, onReset }) {
+  const { plan, planKey, adjustedBase, adjustedRenewal, fits, isBigData, breakdown, msg } = result;
+
+  return (
+    <div style={{ animation: "fadeIn .45s ease" }}>
+      <style>{`@keyframes fadeIn { from { opacity:0; transform:translateY(14px) } to { opacity:1; transform:none } }`}</style>
+
+      {/* Plan hero */}
+      <div style={{ background: `${plan.color}0e`, border: `2px solid ${plan.color}40`, borderRadius: 16, padding: "1.75rem", marginBottom: "1.25rem", textAlign: "center" }}>
+        <div style={{ display: "inline-block", background: plan.color, color: "#000", fontSize: 10, fontWeight: 800, padding: "3px 12px", borderRadius: 20, marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>
+          {plan.badge}
+        </div>
+        <div style={{ fontSize: "2.2rem", fontWeight: 900, color: "#fff", letterSpacing: "-1px" }}>
+          Plan {plan.name}
+        </div>
+        {isBigData ? (
+          <div style={{ marginTop: 12, background: "#f59e0b15", border: "1px solid #f59e0b50", borderRadius: 10, padding: "12px 16px" }}>
+            <p style={{ color: "#f59e0b", fontWeight: 700, fontSize: 14, marginBottom: 4 }}>🔥 Volumen Big Data detectado</p>
+            <p style={{ color: "#888", fontSize: 12 }}>Tu volumen requiere arquitectura especial. El precio es una estimación base — contáctanos para una cotización personalizada.</p>
+          </div>
+        ) : (
+          <div style={{ fontSize: "3rem", fontWeight: 900, color: plan.color, marginTop: 8, letterSpacing: "-2px" }}>
+            ${adjustedBase.toLocaleString()}
+            <span style={{ fontSize: "0.9rem", color: "#555", fontWeight: 400 }}> MXN</span>
+          </div>
+        )}
+        <div style={{ color: "#555", fontSize: 12, marginTop: 4 }}>
+          Renovación estimada: <strong style={{ color: "#888" }}>${adjustedRenewal.toLocaleString()}/mes</strong>
+        </div>
+
+        {!fits && (
+          <div style={{ marginTop: 12, background: "#f59e0b10", border: "1px solid #f59e0b40", borderRadius: 8, padding: "8px 14px", fontSize: 12, color: "#f59e0b" }}>
+            ⚠️ Este plan supera tu presupuesto. Contáctanos para ajustar el alcance.
+          </div>
+        )}
+      </div>
+
+      {/* Desglose */}
+      <Breakdown items={breakdown} total={adjustedBase} />
+
+      {/* Includes */}
+      <div style={{ background: "#0a0a0a", border: "1px solid #1a1a1a", borderRadius: 12, padding: "1.25rem", marginBottom: "1.25rem" }}>
+        <p style={{ color: CYAN, fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>¿Qué incluye?</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem" }}>
+          {[
+            ["📊", `${plan.graphs} gráficas`],
+            ["🎯", `${plan.kpis} KPIs`],
+            ["📑", `${plan.sections} sección${plan.sections > 1 ? "es" : ""}`],
+            ["🔄", `Actualización ${result.freq.label.toLowerCase()}`],
+            ["💬", `Soporte: ${plan.support}`],
+            ["⏱", `Entrega: ${plan.delivery}`],
+            ["🎁", "2 meses acceso gratis"],
+            ["📦", `Volumen: ${result.vol.label.split("–")[0].trim()}...`],
+          ].map(([icon, txt]) => (
+            <div key={txt} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "#aaa" }}>
+              <span>{icon}</span><span>{txt}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* CTA */}
+      <a
+        href={`https://m.me/61563803638340?text=${msg}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: "block", width: "100%", padding: "1rem", borderRadius: 10,
+          textAlign: "center", background: CYAN, color: "#000", fontWeight: 800,
+          fontSize: 15, textDecoration: "none", boxShadow: `0 8px 24px ${CYAN}33`,
+          transition: "all .2s",
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.02)"; e.currentTarget.style.boxShadow = `0 12px 32px ${CYAN}55`; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = `0 8px 24px ${CYAN}33`; }}
+      >
+        💬 Quiero este plan — Abrir Messenger
+      </a>
+
+      <button onClick={onReset} style={{ marginTop: "0.75rem", width: "100%", padding: "0.7rem", background: "transparent", border: "1px solid #1e1e1e", borderRadius: 10, color: "#444", cursor: "pointer", fontSize: 12, transition: "border .2s" }}
+        onMouseEnter={e => e.currentTarget.style.borderColor = "#333"}
+        onMouseLeave={e => e.currentTarget.style.borderColor = "#1e1e1e"}>
+        🔄 Volver a cotizar
+      </button>
+
+      <p style={{ textAlign: "center", fontSize: 10, color: "#2a2a2a", marginTop: 10 }}>
+        * Precio estimado. El costo final puede variar según el alcance del proyecto.
+      </p>
+    </div>
+  );
+}
+
+function CotizadoraDataO() {
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [result, setResult] = useState(null);
+  const [animKey, setAnimKey] = useState(0);
+
+  const select = (field, value) => {
+    const next = { ...answers, [field]: value };
+    setAnswers(next);
+    if (step < STEPS.length - 1) {
+      setTimeout(() => { setStep(s => s + 1); setAnimKey(k => k + 1); }, 200);
+    } else {
+      setResult(calculateQuote(next));
+    }
+  };
+
+  const reset = () => { setStep(0); setAnswers({}); setResult(null); setAnimKey(k => k + 1); };
+  const back  = () => { setStep(s => s - 1); setAnimKey(k => k + 1); };
+
+  const FIELDS   = ["businessType", "dataVolume", "dataSource", "frequency", "budget"];
+  const OPTIONS  = [BUSINESS_TYPES, DATA_VOLUMES, DATA_SOURCES, FREQUENCIES, BUDGETS];
+  const QUESTIONS = [
+    "¿Qué tipo de negocio tienes?",
+    "¿Cuántos registros / filas de datos manejas?",
+    "¿Desde dónde vienen tus datos?",
+    "¿Con qué frecuencia necesitas actualizar tu dashboard?",
+    "¿Cuál es tu presupuesto inicial aproximado?",
+  ];
+  const SUBTITLES = [
+    "Nos ayuda a entender la complejidad operativa.",
+    "El volumen de datos define procesamiento, limpieza y precio.",
+    "Cada fuente tiene distintos niveles de integración.",
+    "Más frecuencia = dashboards más vivos y mayor inversión.",
+    "Te recomendaremos el plan que más te convenga.",
+  ];
+
+  const currentField   = FIELDS[step];
+  const currentOptions = OPTIONS[step];
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#000", display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "2rem 1rem", fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;900&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        @keyframes slideIn { from { opacity:0; transform:translateX(18px) } to { opacity:1; transform:none } }
+        ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: #111; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+      `}</style>
+
+      <div style={{ width: "100%", maxWidth: 600 }}>
+
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+          <div style={{ display: "inline-block", background: `${CYAN}15`, border: `1px solid ${CYAN}35`, borderRadius: 20, padding: "3px 14px", fontSize: 10, fontWeight: 700, color: CYAN, textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>
+            DataO — Cotizador inteligente
+          </div>
+          <h1 style={{ fontSize: "clamp(1.7rem, 5vw, 2.4rem)", fontWeight: 900, color: "#fff", lineHeight: 1.1, letterSpacing: "-1px" }}>
+            Tu plan ideal.<br /><span style={{ color: CYAN }}>En 5 preguntas.</span>
+          </h1>
+          <p style={{ color: "#444", marginTop: 8, fontSize: 13 }}>
+            El volumen de tus datos define tu precio real — no hay sorpresas.
+          </p>
+        </div>
+
+        {/* Card */}
+        <div style={{ background: "#080808", border: "1px solid #141414", borderRadius: 20, padding: "clamp(1.5rem, 5vw, 2.25rem)", boxShadow: "0 24px 64px rgba(0,0,0,.7)" }}>
+
+          {!result ? (
+            <>
+              <StepBar current={step} />
+
+              <div key={animKey} style={{ animation: "slideIn .28s ease" }}>
+                <h2 style={{ color: "#fff", fontSize: "1.15rem", fontWeight: 700, marginBottom: 5 }}>
+                  {QUESTIONS[step]}
+                </h2>
+                <p style={{ color: "#444", fontSize: 12, marginBottom: "1.25rem" }}>
+                  {SUBTITLES[step]}
+                </p>
+
+                {/* Options */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  {currentOptions.map(opt => (
+                    <OptionCard
+                      key={opt.id}
+                      selected={answers[currentField] === opt.id}
+                      highlight={opt.minPlan === "premium"}
+                      onClick={() => select(currentField, opt.id)}
+                    >
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <div>
+                          <div>{opt.label}</div>
+                          {opt.sublabel && (
+                            <div style={{ fontSize: 11, color: answers[currentField] === opt.id ? `${CYAN}99` : "#444", marginTop: 2 }}>
+                              {opt.sublabel}
+                            </div>
+                          )}
+                          {opt.badge && (
+                            <div style={{ display: "inline-block", marginTop: 4, background: opt.minPlan === "premium" ? "#f59e0b20" : "#3b82f620", border: `1px solid ${opt.minPlan === "premium" ? "#f59e0b50" : "#3b82f650"}`, borderRadius: 4, padding: "2px 6px", fontSize: 9, color: opt.minPlan === "premium" ? "#f59e0b" : "#3b82f6", fontWeight: 700 }}>
+                              {opt.badge}
+                            </div>
+                          )}
+                        </div>
+                        {opt.surcharge > 0 && (
+                          <span style={{ fontSize: 11, color: "#555", whiteSpace: "nowrap", marginLeft: 8 }}>
+                            +${opt.surcharge.toLocaleString()}
+                          </span>
+                        )}
+                        {opt.cost > 0 && (
+                          <span style={{ fontSize: 11, color: "#555", whiteSpace: "nowrap", marginLeft: 8 }}>
+                            +${opt.cost.toLocaleString()}
+                          </span>
+                        )}
+                      </div>
+                    </OptionCard>
+                  ))}
+                </div>
+
+                {step > 0 && (
+                  <button onClick={back} style={{ marginTop: "1rem", background: "none", border: "none", color: "#333", cursor: "pointer", fontSize: 12, textDecoration: "underline" }}>
+                    ← Volver
+                  </button>
+                )}
+              </div>
+            </>
+          ) : (
+            <ResultCard result={result} onReset={reset} />
+          )}
+        </div>
+
+        <p style={{ textAlign: "center", color: "#1e1e1e", fontSize: 10, marginTop: "1.25rem" }}>
+          DataO Analytics · Made with 💡 in Mexico
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // SERVICES PAGE - ESTILO APPLE
 // ==========================================
-// Mantiene TODO el contenido original, solo cambia el estilo visual
+// Nueva versión sin precios fijos, usando el cotizador inteligente
 
 const ServicesPage = ({ onNavigate }) => {
   const services = [
-    /*{
-       name: 'Dashboard Básico',
-      price: '$499 MXN',
-      oldPrice: '$999 MXN',
+    {
+      name: 'Dashboard Básico',
       idealFor: 'Negocios pequeños, freelancers, emprendedores',
       features: [
         '✓ 4 gráficas clave',
-        '✓ 2 KPIs principales', 
+        '✓ 2 KPIs principales',
         '✓ 2 meses de acceso GRATIS',
         '✓ 1 actualización mensual',
         '✓ 1 revisión gratuita',
         '✓ Sin permanencia',
         '⏱ 3–5 días hábiles'
-      ],
-      renewal: '$200/mes después'
-    }, */
+      ]
+    },
     {
       name: 'Dashboard Profesional',
-      price: '$999 MXN',
-      oldPrice: '$1,999 MXN',
       idealFor: 'PYMEs, tiendas, restaurantes, clínicas, negocios en crecimiento',
       features: [
         '✓ 6 gráficas avanzadas',
@@ -794,13 +1254,10 @@ const ServicesPage = ({ onNavigate }) => {
         '✓ 2 revisiones gratuitas',
         '✓ Soporte WhatsApp',
         '✓ Sin permanencia'
-      ],
-      renewal: '$300/mes después'
+      ]
     },
-    /*{
+    {
       name: 'Dashboard Premium',
-      price: '$1,749 MXN',
-      oldPrice: '$3,499 MXN',
       idealFor: 'Franquicias, cadenas, consultorías, empresas',
       features: [
         '✓ 8 gráficas personalizadas',
@@ -811,9 +1268,8 @@ const ServicesPage = ({ onNavigate }) => {
         '✓ 3 revisiones gratuitas',
         '✓ Capacitación (videollamada)',
         '✓ Atención prioritaria'
-      ],
-      renewal: '$500/mes después'
-    }*/
+      ]
+    }
   ];
 
   return (
@@ -848,7 +1304,7 @@ const ServicesPage = ({ onNavigate }) => {
             letterSpacing: '-0.03em',
             lineHeight: '1.1'
           }}>
-            Nuestros Servicio
+            Nuestros Servicios
           </h2>
           <p style={{ 
             fontSize: 'clamp(1.2rem, 3vw, 1.8rem)', 
@@ -942,78 +1398,19 @@ const ServicesPage = ({ onNavigate }) => {
                 ))}
               </ul>
 
-              {/* Precio */}
+              {/* Info de cotización */}
               <div style={{ 
                 marginBottom: '1.5rem',
                 paddingTop: '1.5rem',
                 borderTop: '1px solid #f5f5f7'
               }}>
-                <div style={{ 
-                  fontSize: '0.85rem', 
-                  color: '#86868b', 
-                  marginBottom: '0.5rem',
-                  fontWeight: '500',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
-                }}>
-                  Precio inicial
-                </div>
-                
-                {service.oldPrice && (
-                  <p style={{ 
-                    fontSize: '1rem', 
-                    color: '#86868b', 
-                    textDecoration: 'line-through', 
-                    marginBottom: '0.25rem',
-                    fontWeight: '400'
-                  }}>
-                    {service.oldPrice}
-                  </p>
-                )}
-                
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', marginBottom: '0.75rem' }}>
-                  <p style={{ 
-                    fontSize: '2.5rem', 
-                    fontWeight: '700', 
-                    color: '#000000', 
-                    margin: 0,
-                    letterSpacing: '-0.02em'
-                  }}>
-                    {service.price}
-                  </p>
-                  
-                  {service.oldPrice && (
-                    <div style={{ 
-                      background: '#34c759', 
-                      color: '#ffffff', 
-                      padding: '0.35rem 0.75rem', 
-                      borderRadius: '6px', 
-                      fontSize: '0.75rem', 
-                      fontWeight: '600'
-                    }}>
-                      50% OFF
-                    </div>
-                  )}
-                </div>
-
                 <p style={{ 
-                  fontSize: '0.8rem', 
-                  color: '#ff3b30', 
-                  fontWeight: '600', 
-                  marginBottom: '0.75rem' 
+                  fontSize: '0.9rem', 
+                  color: '#86868b', 
+                  fontWeight: '400'
                 }}>
-                  ⏰ Oferta válida hasta fin de mes
+                  💰 El precio se calcula en el cotizador inteligente basado en tu volumen de datos y necesidades específicas.
                 </p>
-                
-                {service.renewal && (
-                  <p style={{ 
-                    fontSize: '0.9rem', 
-                    color: '#86868b', 
-                    fontWeight: '400'
-                  }}>
-                    Renovación: {service.renewal}
-                  </p>
-                )}
               </div>
 
               {/* Botones */}
@@ -1077,7 +1474,17 @@ const ServicesPage = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* Tabla Comparativa - SIN CAMBIOS (mantener como está) */}
+      {/* Cotizador Inteligente - Nueva sección */}
+      <section style={{ 
+        maxWidth: '100%', 
+        margin: '0', 
+        padding: '0',
+        background: '#000000'
+      }}>
+        <CotizadoraDataO />
+      </section>
+
+      {/* Tabla Comparativa - comentada */}
       {/* <section style={{ 
       
         margin: '0 auto', 
@@ -2285,7 +2692,7 @@ const App = () => {
                   margin: 0,
                   padding: 0 
                 }}>
-      <Header currentPage={currentPage} onNavigate={handleNavigate} />
+      {!portalClient && <Header currentPage={currentPage} onNavigate={handleNavigate} />}
       
       <main style={{ flex: 1 , width: '100%', overflow: 'hidden'}}>
         {currentPage === 'home' && <HomePage onNavigate={handleNavigate} />}
@@ -2299,8 +2706,8 @@ const App = () => {
         )}
       </main>
 
-      <Footer />
-      <MessengerButton />
+      {!portalClient && <Footer />}
+      {!portalClient && <MessengerButton />}
     </div>
   );
 };

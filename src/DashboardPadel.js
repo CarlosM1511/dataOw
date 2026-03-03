@@ -692,10 +692,6 @@ const PadelDashboard = ({ client }) => {
               </div>
             </div>
           </div>
-
-          <div style={{ marginTop: '2rem', textAlign: 'center', color: theme.darkGray, fontSize: '0.75rem' }}>
-            Página 1 de 3 | DataO Analytics
-          </div>
         </div>
       </div>
       </>
@@ -818,10 +814,6 @@ const PadelDashboard = ({ client }) => {
             </ul>
           </div>
         </div>
-
-        <div className="text-center text-xs text-gray-400 mt-12">
-          Página 2 de 3 | DataO Analytics | Reporte generado {new Date().toLocaleDateString()}
-        </div>
       </div>
       </div>
     )}
@@ -878,10 +870,6 @@ const PadelDashboard = ({ client }) => {
               ))}
             </tbody>
           </table>
-        </div>
-
-        <div className="text-center text-xs text-gray-400 mt-12">
-          Página 3 de 3 | DataO Analytics | Confidencial
         </div>
       </div>
       </div>
