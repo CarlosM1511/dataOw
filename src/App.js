@@ -997,7 +997,7 @@ function Breakdown({ items, total }) {
 }
 
 function ResultCard({ result, onReset }) {
-  const { plan, planKey, adjustedBase, adjustedRenewal, fits, isBigData, breakdown, msg } = result;
+  const { plan, adjustedBase, adjustedRenewal, fits, isBigData, breakdown, msg } = result;
 
   return (
     <div style={{ animation: "fadeIn .45s ease" }}>
