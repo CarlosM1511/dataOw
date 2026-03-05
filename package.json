@@ -1,7 +1,8 @@
 {
-  "name": "datao-react",
-  "version": "0.1.0",
+  "name": "datao-panel",
+  "version": "0.2.0",
   "private": true,
+  "description": "DataO Panel - Business Intelligence Dashboard",
   "dependencies": {
     "clsx": "^2.1.1",
     "lucide-react": "^0.556.0",
@@ -16,18 +17,6 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   },
   "devDependencies": {
     "@types/papaparse": "^5.3.14",
